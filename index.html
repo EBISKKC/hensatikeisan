@@ -130,70 +130,56 @@
 <body>
   <div class="container">
     <h1>公認会計士試験 偏差値計算</h1>
-    <p style="text-align:center;">各科目の偏差値を入力し、計算ボタンを押してください。</p>
-    <p style="text-align:center;">※偏差値は半角数字で入力してください。</p>
+    <p style="text-align:center;">各科目の得点率を入力し、計算ボタンを押してください。</p>
+    <p style="text-align:center;">※得点率は半角数字で入力してください。</p>
     <form id="hensachiForm" autocomplete="off">
       <div class="card zaimu">
         <div class="card-title">財務会計論
           <label class="menjo-label"><input type="checkbox" id="menjo-zaimu">免除</label>
         </div>
         <div class="menjo-message" id="menjo-msg-zaimu" style="display:none;">免除</div>
-        <label for="zaimu1">第１問</label>
-        <input type="number" id="zaimu1" name="zaimu1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="zaimu2">第２問</label>
-        <input type="number" id="zaimu2" name="zaimu2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="zaimu3">第３問</label>
-        <input type="number" id="zaimu3" name="zaimu3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="zaimu">偏差値</label>
+        <input type="number" id="zaimu" name="zaimu" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card kanri">
         <div class="card-title">管理会計論
           <label class="menjo-label"><input type="checkbox" id="menjo-kanri">免除</label>
         </div>
         <div class="menjo-message" id="menjo-msg-kanri" style="display:none;">免除</div>
-        <label for="kanri1">第１問</label>
-        <input type="number" id="kanri1" name="kanri1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="kanri2">第２問</label>
-        <input type="number" id="kanri2" name="kanri2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="kanri">偏差値</label>
+        <input type="number" id="kanri" name="kanri" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card kansa">
         <div class="card-title">監査論
           <label class="menjo-label"><input type="checkbox" id="menjo-kansa">免除</label>
         </div>
         <div class="menjo-message" id="menjo-msg-kansa" style="display:none;">免除</div>
-        <label for="kansa1">第１問</label>
-        <input type="number" id="kansa1" name="kansa1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="kansa2">第２問</label>
-        <input type="number" id="kansa2" name="kansa2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="kansa">偏差値</label>
+        <input type="number" id="kansa" name="kansa" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card hou">
         <div class="card-title">企業法
           <label class="menjo-label"><input type="checkbox" id="menjo-hou">免除</label>
         </div>
         <div class="menjo-message" id="menjo-msg-hou" style="display:none;">免除</div>
-        <label for="hou1">第１問</label>
-        <input type="number" id="hou1" name="hou1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="hou2">第２問</label>
-        <input type="number" id="hou2" name="hou2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="hou">偏差値</label>
+        <input type="number" id="hou" name="hou" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card sozei">
         <div class="card-title">租税法
           <label class="menjo-label"><input type="checkbox" id="menjo-sozei">免除</label>
         </div>
         <div class="menjo-message" id="menjo-msg-sozei" style="display:none;">免除</div>
-        <label for="sozei1">第１問</label>
-        <input type="number" id="sozei1" name="sozei1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="sozei2">第２問</label>
-        <input type="number" id="sozei2" name="sozei2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="sozei">偏差値</label>
+        <input type="number" id="sozei" name="sozei" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card sentaku">
         <div class="card-title">選択科目（経営学）
           <label class="menjo-label"><input type="checkbox" id="menjo-sentaku">免除</label>
         </div>
         <div class="menjo-message" id="menjo-msg-sentaku" style="display:none;">免除</div>
-        <label for="sentaku1">第１問</label>
-        <input type="number" id="sentaku1" name="sentaku1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="sentaku2">第２問</label>
-        <input type="number" id="sentaku2" name="sentaku2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="sentaku">偏差値</label>
+        <input type="number" id="sentaku" name="sentaku" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <button type="button" id="calcBtn">計算する</button>
     </form>
@@ -204,6 +190,11 @@
     import { calcHensachi } from './hensachi-calc.js';
     let chart = null;
 
+    function getNum(id) {
+      const v = document.getElementById(id).value;
+      return v === '' || isNaN(Number(v)) ? null : Number(v);
+    }
+
     // 全角数字チェック用関数
     function containsZenkakuNumber(str) {
       return /[０-９]/.test(str);
@@ -212,12 +203,12 @@
     document.getElementById('calcBtn').addEventListener('click', function() {
       // 入力欄をすべて取得
       const inputIds = [
-        'zaimu1', 'zaimu2', 'zaimu3',
-        'kanri1', 'kanri2',
-        'kansa1', 'kansa2',
-        'hou1', 'hou2',
-        'sozei1', 'sozei2',
-        'sentaku1', 'sentaku2'
+        'zaimu',
+        'kanri',
+        'kansa',
+        'hou',
+        'sozei',
+        'sentaku'
       ];
       for (const id of inputIds) {
         const val = document.getElementById(id).value;
@@ -228,37 +219,123 @@
         }
       }
 
-      const subjects = [
-        { name: '財務会計論（大門１）', value: document.getElementById('zaimu1').value },
-        { name: '財務会計論（大門２）', value: document.getElementById('zaimu2').value },
-        { name: '財務会計論（大門３）', value: document.getElementById('zaimu3').value },
-        { name: '管理会計論（大門１）', value: document.getElementById('kanri1').value },
-        { name: '管理会計論（大門２）', value: document.getElementById('kanri2').value },
-        { name: '監査論（大門１）', value: document.getElementById('kansa1').value },
-        { name: '監査論（大門２）', value: document.getElementById('kansa2').value },
-        { name: '企業法（大門１）', value: document.getElementById('hou1').value },
-        { name: '企業法（大門２）', value: document.getElementById('hou2').value },
-        { name: '租税法（大門１）', value: document.getElementById('sozei1').value },
-        { name: '租税法（大門２）', value: document.getElementById('sozei2').value },
-        { name: '経営学（大門１）', value: document.getElementById('sentaku1').value },
-        { name: '経営学（大門２）', value: document.getElementById('sentaku2').value }
-      ];
-      const { average, filteredLabels, filteredValues } = calcHensachi(subjects);
-      if (average === null) {
-        document.getElementById('result').textContent = '偏差値を1つ以上入力してください。';
+      // 入力値が未入力の科目があればエラー表示
+      let emptyInput = false;
+      for (const id of inputIds) {
+        const menjoId = id.replace(/^(zaimu|kanri|kansa|hou|sozei|sentaku)$/, 'menjo-$1');
+        const isMenjo = document.getElementById(menjoId).checked;
+        const val = document.getElementById(id).value;
+        if (!isMenjo && (val === '' || isNaN(Number(val)))) {
+          emptyInput = true;
+          break;
+        }
+      }
+      if (emptyInput) {
+        document.getElementById('result').textContent = '偏差値を入力してください。';
         if (chart) chart.destroy();
         return;
       }
-      document.getElementById('result').textContent = `総合偏差値：${average.toFixed(2)}`;
+
+      // 免除判定
+      const menjo = {
+        zaimu: document.getElementById('menjo-zaimu').checked,
+        kanri: document.getElementById('menjo-kanri').checked,
+        kansa: document.getElementById('menjo-kansa').checked,
+        hou: document.getElementById('menjo-hou').checked,
+        sozei: document.getElementById('menjo-sozei').checked,
+        sentaku: document.getElementById('menjo-sentaku').checked
+      };
+
+      // 各科目の偏差値計算
+      let hensachi = {};
+      if (!menjo.kanri) {
+        const v = getNum('kanri');
+        hensachi['管理会計論'] = v !== null ? v : null;
+      } else {
+        hensachi['管理会計論'] = null;
+      }
+      if (!menjo.zaimu) {
+        const v = getNum('zaimu');
+        hensachi['財務会計論'] = v !== null ? v : null;
+      } else {
+        hensachi['財務会計論'] = null;
+      }
+      if (!menjo.kansa) {
+        const v = getNum('kansa');
+        hensachi['監査論'] = v !== null ? v : null;
+      } else {
+        hensachi['監査論'] = null;
+      }
+      if (!menjo.hou) {
+        const v = getNum('hou');
+        hensachi['企業法'] = v !== null ? v : null;
+      } else {
+        hensachi['企業法'] = null;
+      }
+      if (!menjo.sozei) {
+        const v = getNum('sozei');
+        hensachi['租税法'] = v !== null ? v : null;
+      } else {
+        hensachi['租税法'] = null;
+      }
+      if (!menjo.sentaku) {
+        const v = getNum('sentaku');
+        hensachi['経営学'] = v !== null ? v : null;
+      } else {
+        hensachi['経営学'] = null;
+      }
+
+      // 総合偏差値計算
+      let kanri = hensachi['管理会計論'];
+      let zaimu = hensachi['財務会計論'];
+      let kansa = hensachi['監査論'];
+      let hou = hensachi['企業法'];
+      let sozei = hensachi['租税法'];
+      let sentaku = hensachi['経営学'];
+      let sogo = null;
+      let sogo_n = 0;
+      let sogo_sum = 0;
+      if (kanri !== null) { sogo_sum += kanri; sogo_n += 1; }
+      if (zaimu !== null) { sogo_sum += zaimu*2; sogo_n += 2; }
+      if (kansa !== null) { sogo_sum += kansa; sogo_n += 1; }
+      if (hou !== null) { sogo_sum += hou; sogo_n += 1; }
+      if (sozei !== null) { sogo_sum += sozei; sogo_n += 1; }
+      if (sentaku !== null) { sogo_sum += sentaku; sogo_n += 1; }
+      if (sogo_n > 0) {
+        sogo = sogo_sum / sogo_n;
+      }
+
+      // 表示用データ作成
+      const labels = [];
+      const values = [];
+      for (const key of ['管理会計論','財務会計論','監査論','企業法','租税法','経営学']) {
+        if (hensachi[key] !== null) {
+          labels.push(key);
+          values.push(Number(hensachi[key].toFixed(2)));
+        }
+      }
+      let sogoLabel = '';
+      if (sogo !== null) {
+        sogoLabel = `総合偏差値：${Number(sogo.toFixed(2))}`;
+      }
+
+      // 結果表示
+      let html = '';
+      if (sogoLabel) {
+        html += sogoLabel + '<br>';
+      }
+      document.getElementById('result').innerHTML = html;
+
+      // レーダーチャート描画
       const ctx = document.getElementById('radarChart').getContext('2d');
       if (chart) chart.destroy();
       chart = new Chart(ctx, {
         type: 'radar',
         data: {
-          labels: filteredLabels,
+          labels: labels,
           datasets: [{
             label: '偏差値',
-            data: filteredValues,
+            data: values,
             backgroundColor: 'rgba(0,123,255,0.2)',
             borderColor: 'rgba(0,123,255,1)',
             pointBackgroundColor: 'rgba(0,123,255,1)',
@@ -273,8 +350,8 @@
           },
           scales: {
             r: {
-              min: 30,
-              max: 80,
+              min: 20,
+              max: 70,
               ticks: {
                 stepSize: 10,
                 color: '#666',
@@ -291,12 +368,12 @@
 
     // 免除チェックボックスの制御
     const menjoList = [
-      { box: 'menjo-zaimu', msg: 'menjo-msg-zaimu', inputs: ['zaimu1','zaimu2','zaimu3'] },
-      { box: 'menjo-kanri', msg: 'menjo-msg-kanri', inputs: ['kanri1','kanri2'] },
-      { box: 'menjo-kansa', msg: 'menjo-msg-kansa', inputs: ['kansa1','kansa2'] },
-      { box: 'menjo-hou', msg: 'menjo-msg-hou', inputs: ['hou1','hou2'] },
-      { box: 'menjo-sozei', msg: 'menjo-msg-sozei', inputs: ['sozei1','sozei2'] },
-      { box: 'menjo-sentaku', msg: 'menjo-msg-sentaku', inputs: ['sentaku1','sentaku2'] }
+      { box: 'menjo-zaimu', msg: 'menjo-msg-zaimu', inputs: ['zaimu'] },
+      { box: 'menjo-kanri', msg: 'menjo-msg-kanri', inputs: ['kanri'] },
+      { box: 'menjo-kansa', msg: 'menjo-msg-kansa', inputs: ['kansa'] },
+      { box: 'menjo-hou', msg: 'menjo-msg-hou', inputs: ['hou'] },
+      { box: 'menjo-sozei', msg: 'menjo-msg-sozei', inputs: ['sozei'] },
+      { box: 'menjo-sentaku', msg: 'menjo-msg-sentaku', inputs: ['sentaku'] }
     ];
     menjoList.forEach(({box, msg, inputs}) => {
       const cb = document.getElementById(box);
