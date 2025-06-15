@@ -329,6 +329,15 @@
       // レーダーチャート描画
       const ctx = document.getElementById('radarChart').getContext('2d');
       if (chart) chart.destroy();
+      // カード色と同じ色をラベルに適用
+      const labelColors = {
+        '管理会計論': '#e6a100', // 濃いオレンジ
+        '財務会計論': '#1976d2', // 濃い青
+        '監査論': '#0288d1', // 濃い水色
+        '企業法': '#bfa800', // 濃い黄色
+        '租税法': '#8e24aa', // 濃い紫
+        '経営学': '#388e3c' // 濃い緑
+      };
       chart = new Chart(ctx, {
         type: 'radar',
         data: {
@@ -358,7 +367,12 @@
                 font: { size: 12 }
               },
               pointLabels: {
-                font: { size: 13 }
+                font: { size: 13 },
+                color: function(context) {
+                  const idx = context.index;
+                  const label = context.chart.data.labels[idx];
+                  return labelColors[label] || '#222';
+                }
               }
             }
           }
