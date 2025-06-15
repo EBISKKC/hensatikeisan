@@ -327,14 +327,39 @@
         }
       }
       let sogoLabel = '';
+      let message = '';
+      let tweetText = '';
       if (sogo !== null) {
-        sogoLabel = `総合偏差値：${Number(sogo.toFixed(2))}`;
+        const totalHensachi = Number(sogo.toFixed(2));
+        sogoLabel = `総合偏差値：${totalHensachi}`;
+        if (totalHensachi >= 65) {
+          message = "やるやん！天才爆誕！？🎉";
+          tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 60) {
+          message = "いいね！このまま突っ走れ～💨";
+          tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 55) {
+          message = "ジワジワきてる、その調子🔥";
+          tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 52) {
+          message = "もうひと伸び！次の自分に期待😎";
+          tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 50) {
+          message = "おしい！あとちょっとでゾーン突入🚀";
+          tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
+        } else {
+          message = "まだまだここから！レベチ目指してリベンジ🔥";
+          tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
+        }
       }
 
       // 結果表示
       let html = '';
       if (sogoLabel) {
         html += sogoLabel + '<br>';
+      }
+      if (message) {
+        html += `<span style="font-size:1.1em;color:#1976d2;">${message}</span><br>`;
       }
       document.getElementById('result').innerHTML = html;
 
@@ -428,10 +453,29 @@
         alert('先に計算してください。');
         return;
       }
-      // X（Twitter）投稿用テキスト生成
-      const url = location.href;
-      const tweet = encodeURIComponent(resultText + '\n' + url + '\n#公認会計士 #偏差値計算');
+      // 総合偏差値に応じたtweetTextを再生成
+      let tweetText = '';
+      const sogoText = document.getElementById('result').textContent.match(/総合偏差値：([0-9.]+)/);
+      let totalHensachi = sogoText ? Number(sogoText[1]) : null;
+      if (totalHensachi !== null) {
+        if (totalHensachi >= 65) {
+          tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 60) {
+          tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 55) {
+          tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 52) {
+          tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
+        } else if (totalHensachi >= 50) {
+          tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
+        } else {
+          tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
+        }
+      } else {
+        tweetText = resultText + '\n' + location.href + '\n#公認会計士 #偏差値計算';
+      }
       // Xアプリ優先で開くintentスキーム
+      const tweet = encodeURIComponent(tweetText + '\n' + location.href);
       const xIntentUrl = `twitter://post?message=${tweet}`;
       setTimeout(() => {
         window.location.href = xIntentUrl;
