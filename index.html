@@ -108,6 +108,8 @@
 <body>
   <div class="container">
     <h1>公認会計士試験 偏差値計算</h1>
+    <p style="text-align:center;">各科目の偏差値を入力し、計算ボタンを押してください。</p>
+    <p style="text-align:center;">※偏差値は半角数字で入力してください。</p>
     <form id="hensachiForm" autocomplete="off">
       <div class="card">
         <div class="card-title">財務会計論</div>
@@ -161,7 +163,31 @@
   <script type="module">
     import { calcHensachi } from './hensachi-calc.js';
     let chart = null;
+
+    // 全角数字チェック用関数
+    function containsZenkakuNumber(str) {
+      return /[０-９]/.test(str);
+    }
+
     document.getElementById('calcBtn').addEventListener('click', function() {
+      // 入力欄をすべて取得
+      const inputIds = [
+        'zaimu1', 'zaimu2', 'zaimu3',
+        'kanri1', 'kanri2',
+        'kansa1', 'kansa2',
+        'hou1', 'hou2',
+        'sozei1', 'sozei2',
+        'sentaku1', 'sentaku2'
+      ];
+      for (const id of inputIds) {
+        const val = document.getElementById(id).value;
+        if (containsZenkakuNumber(val)) {
+          document.getElementById('result').textContent = '偏差値は半角数字で入力してください。';
+          if (chart) chart.destroy();
+          return;
+        }
+      }
+
       const subjects = [
         { name: '財務会計論（大門１）', value: document.getElementById('zaimu1').value },
         { name: '財務会計論（大門２）', value: document.getElementById('zaimu2').value },
