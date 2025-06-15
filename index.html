@@ -185,6 +185,7 @@
     </form>
     <div class="result" id="result"></div>
     <canvas id="radarChart" style="max-width:100%;"></canvas>
+    <button type="button" id="tweetBtn" style="width:100%;background:#1da1f2;color:#fff;font-weight:bold;border:none;border-radius:6px;padding:0.7rem 0;margin-bottom:1.2rem;cursor:pointer;display:none;">結果をXでシェア</button>
   </div>
   <script type="module">
     import { calcHensachi } from './hensachi-calc.js';
@@ -215,6 +216,7 @@
         if (containsZenkakuNumber(val)) {
           document.getElementById('result').textContent = '偏差値は半角数字で入力してください。';
           if (chart) chart.destroy();
+          document.getElementById('tweetBtn').style.display = 'none';
           return;
         }
       }
@@ -233,7 +235,17 @@
       if (emptyInput) {
         document.getElementById('result').textContent = '偏差値を入力してください。';
         if (chart) chart.destroy();
+        document.getElementById('tweetBtn').style.display = 'none';
         return;
+      }
+      for (const id of inputIds) {
+        const val = document.getElementById(id).value;
+        if (containsZenkakuNumber(val)) {
+          document.getElementById('result').textContent = '偏差値は半角数字で入力してください。';
+          if (chart) chart.destroy();
+          document.getElementById('tweetBtn').style.display = 'none';
+          return;
+        }
       }
 
       // 免除判定
@@ -378,6 +390,8 @@
           }
         }
       });
+      // シェアボタン表示
+      document.getElementById('tweetBtn').style.display = '';
     });
 
     // 免除チェックボックスの制御
@@ -406,6 +420,17 @@
           });
         }
       });
+    });
+
+    document.getElementById('tweetBtn').addEventListener('click', function() {
+      const resultText = document.getElementById('result').textContent.trim();
+      if (!resultText) {
+        alert('先に計算してください。');
+        return;
+      }
+      const url = location.href;
+      const tweet = encodeURIComponent(resultText + '\n' + url + '\n#公認会計士 #偏差値計算');
+      window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
     });
   </script>
 </body>
