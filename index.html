@@ -168,7 +168,8 @@
     <div class="result" id="result"></div>
     <canvas id="radarChart" style="max-width:100%;"></canvas>
   </div>
-  <script>
+  <script type="module">
+    import { calcHensachi } from './hensachi-calc.js';
     let chart = null;
     document.getElementById('calcBtn').addEventListener('click', function() {
       const subjects = [
@@ -191,31 +192,22 @@
         { name: '経営学（大門２）', value: document.getElementById('sentaku2').value },
         { name: '経営学（大門３）', value: document.getElementById('sentaku3').value }
       ];
-
-      // 入力値が空欄でないものだけ抽出
-      const filtered = subjects.filter(s => s.value !== '' && !isNaN(Number(s.value)));
-      if (filtered.length === 0) {
+      const { average, filteredLabels, filteredValues } = calcHensachi(subjects);
+      if (average === null) {
         document.getElementById('result').textContent = '偏差値を1つ以上入力してください。';
         if (chart) chart.destroy();
         return;
       }
-
-      // 偏差値の配列
-      const values = filtered.map(s => Number(s.value));
-      // 平均計算
-      const avg = values.reduce((a, b) => a + b, 0) / values.length;
-      document.getElementById('result').textContent = `総合偏差値：${avg.toFixed(2)}`;
-
-      // レーダーチャート描画
+      document.getElementById('result').textContent = `総合偏差値：${average.toFixed(2)}`;
       const ctx = document.getElementById('radarChart').getContext('2d');
       if (chart) chart.destroy();
       chart = new Chart(ctx, {
         type: 'radar',
         data: {
-          labels: filtered.map(s => s.name),
+          labels: filteredLabels,
           datasets: [{
             label: '偏差値',
-            data: values,
+            data: filteredValues,
             backgroundColor: 'rgba(0,123,255,0.2)',
             borderColor: 'rgba(0,123,255,1)',
             pointBackgroundColor: 'rgba(0,123,255,1)',
