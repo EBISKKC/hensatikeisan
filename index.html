@@ -111,57 +111,47 @@
     <form id="hensachiForm" autocomplete="off">
       <div class="card">
         <div class="card-title">財務会計論</div>
-        <label for="zaimu1">大門１</label>
+        <label for="zaimu1">第１問</label>
         <input type="number" id="zaimu1" name="zaimu1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="zaimu2">大門２</label>
+        <label for="zaimu2">第２問</label>
         <input type="number" id="zaimu2" name="zaimu2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="zaimu3">大門３</label>
+        <label for="zaimu3">第３問</label>
         <input type="number" id="zaimu3" name="zaimu3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card kanri">
         <div class="card-title">管理会計論</div>
-        <label for="kanri1">大門１</label>
+        <label for="kanri1">第１問</label>
         <input type="number" id="kanri1" name="kanri1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="kanri2">大門２</label>
+        <label for="kanri2">第２問</label>
         <input type="number" id="kanri2" name="kanri2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="kanri3">大門３</label>
-        <input type="number" id="kanri3" name="kanri3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card kansa">
         <div class="card-title">監査論</div>
-        <label for="kansa1">大門１</label>
+        <label for="kansa1">第１問</label>
         <input type="number" id="kansa1" name="kansa1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="kansa2">大門２</label>
+        <label for="kansa2">第２問</label>
         <input type="number" id="kansa2" name="kansa2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="kansa3">大門３</label>
-        <input type="number" id="kansa3" name="kansa3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card hou">
         <div class="card-title">企業法</div>
-        <label for="hou1">大門１</label>
+        <label for="hou1">第１問</label>
         <input type="number" id="hou1" name="hou1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="hou2">大門２</label>
+        <label for="hou2">第２問</label>
         <input type="number" id="hou2" name="hou2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="hou3">大門３</label>
-        <input type="number" id="hou3" name="hou3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card sozei">
         <div class="card-title">租税法</div>
-        <label for="sozei1">大門１</label>
+        <label for="sozei1">第１問</label>
         <input type="number" id="sozei1" name="sozei1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="sozei2">大門２</label>
+        <label for="sozei2">第２問</label>
         <input type="number" id="sozei2" name="sozei2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="sozei3">大門３</label>
-        <input type="number" id="sozei3" name="sozei3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card sentaku">
         <div class="card-title">選択科目（経営学）</div>
-        <label for="sentaku1">大門１</label>
+        <label for="sentaku1">第１問</label>
         <input type="number" id="sentaku1" name="sentaku1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="sentaku2">大門２</label>
+        <label for="sentaku2">第２問</label>
         <input type="number" id="sentaku2" name="sentaku2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-        <label for="sentaku3">大門３</label>
-        <input type="number" id="sentaku3" name="sentaku3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <button type="button" id="calcBtn">計算する</button>
     </form>
@@ -178,19 +168,14 @@
         { name: '財務会計論（大門３）', value: document.getElementById('zaimu3').value },
         { name: '管理会計論（大門１）', value: document.getElementById('kanri1').value },
         { name: '管理会計論（大門２）', value: document.getElementById('kanri2').value },
-        { name: '管理会計論（大門３）', value: document.getElementById('kanri3').value },
         { name: '監査論（大門１）', value: document.getElementById('kansa1').value },
         { name: '監査論（大門２）', value: document.getElementById('kansa2').value },
-        { name: '監査論（大門３）', value: document.getElementById('kansa3').value },
         { name: '企業法（大門１）', value: document.getElementById('hou1').value },
         { name: '企業法（大門２）', value: document.getElementById('hou2').value },
-        { name: '企業法（大門３）', value: document.getElementById('hou3').value },
         { name: '租税法（大門１）', value: document.getElementById('sozei1').value },
         { name: '租税法（大門２）', value: document.getElementById('sozei2').value },
-        { name: '租税法（大門３）', value: document.getElementById('sozei3').value },
         { name: '経営学（大門１）', value: document.getElementById('sentaku1').value },
-        { name: '経営学（大門２）', value: document.getElementById('sentaku2').value },
-        { name: '経営学（大門３）', value: document.getElementById('sentaku3').value }
+        { name: '経営学（大門２）', value: document.getElementById('sentaku2').value }
       ];
       const { average, filteredLabels, filteredValues } = calcHensachi(subjects);
       if (average === null) {
