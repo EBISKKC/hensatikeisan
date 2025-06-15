@@ -62,7 +62,6 @@
       color: #333;
     }
     .card {
-      background: #f3f6fa;
       border-radius: 8px;
       padding: 1rem;
       margin-bottom: 1.2rem;
@@ -73,6 +72,23 @@
       font-size: 1.08rem;
       margin-bottom: 0.7rem;
       color: #1a237e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .menjo-label {
+      font-weight: normal;
+      font-size: 0.98rem;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.2em;
+    }
+    .menjo-message {
+      color: #b71c1c;
+      font-size: 1rem;
+      margin-bottom: 0.7rem;
+      text-align: left;
     }
     .card.kanri {
       background: #fff7e0;
@@ -94,6 +110,10 @@
       background: #e0ffe0;
       /* 緑色 */
     }
+    .card.zaimu {
+      background: #e3f0ff;
+      /* 青色 */
+    }
     @media (max-width: 600px) {
       .container {
         margin: 0.5rem;
@@ -111,8 +131,11 @@
     <p style="text-align:center;">各科目の偏差値を入力し、計算ボタンを押してください。</p>
     <p style="text-align:center;">※偏差値は半角数字で入力してください。</p>
     <form id="hensachiForm" autocomplete="off">
-      <div class="card">
-        <div class="card-title">財務会計論</div>
+      <div class="card zaimu">
+        <div class="card-title">財務会計論
+          <label class="menjo-label"><input type="checkbox" id="menjo-zaimu">免除</label>
+        </div>
+        <div class="menjo-message" id="menjo-msg-zaimu" style="display:none;">免除</div>
         <label for="zaimu1">第１問</label>
         <input type="number" id="zaimu1" name="zaimu1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
         <label for="zaimu2">第２問</label>
@@ -121,35 +144,50 @@
         <input type="number" id="zaimu3" name="zaimu3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card kanri">
-        <div class="card-title">管理会計論</div>
+        <div class="card-title">管理会計論
+          <label class="menjo-label"><input type="checkbox" id="menjo-kanri">免除</label>
+        </div>
+        <div class="menjo-message" id="menjo-msg-kanri" style="display:none;">免除</div>
         <label for="kanri1">第１問</label>
         <input type="number" id="kanri1" name="kanri1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
         <label for="kanri2">第２問</label>
         <input type="number" id="kanri2" name="kanri2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card kansa">
-        <div class="card-title">監査論</div>
+        <div class="card-title">監査論
+          <label class="menjo-label"><input type="checkbox" id="menjo-kansa">免除</label>
+        </div>
+        <div class="menjo-message" id="menjo-msg-kansa" style="display:none;">免除</div>
         <label for="kansa1">第１問</label>
         <input type="number" id="kansa1" name="kansa1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
         <label for="kansa2">第２問</label>
         <input type="number" id="kansa2" name="kansa2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card hou">
-        <div class="card-title">企業法</div>
+        <div class="card-title">企業法
+          <label class="menjo-label"><input type="checkbox" id="menjo-hou">免除</label>
+        </div>
+        <div class="menjo-message" id="menjo-msg-hou" style="display:none;">免除</div>
         <label for="hou1">第１問</label>
         <input type="number" id="hou1" name="hou1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
         <label for="hou2">第２問</label>
         <input type="number" id="hou2" name="hou2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card sozei">
-        <div class="card-title">租税法</div>
+        <div class="card-title">租税法
+          <label class="menjo-label"><input type="checkbox" id="menjo-sozei">免除</label>
+        </div>
+        <div class="menjo-message" id="menjo-msg-sozei" style="display:none;">免除</div>
         <label for="sozei1">第１問</label>
         <input type="number" id="sozei1" name="sozei1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
         <label for="sozei2">第２問</label>
         <input type="number" id="sozei2" name="sozei2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
       </div>
       <div class="card sentaku">
-        <div class="card-title">選択科目（経営学）</div>
+        <div class="card-title">選択科目（経営学）
+          <label class="menjo-label"><input type="checkbox" id="menjo-sentaku">免除</label>
+        </div>
+        <div class="menjo-message" id="menjo-msg-sentaku" style="display:none;">免除</div>
         <label for="sentaku1">第１問</label>
         <input type="number" id="sentaku1" name="sentaku1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
         <label for="sentaku2">第２問</label>
@@ -245,6 +283,34 @@
               }
             }
           }
+        }
+      });
+    });
+
+    // 免除チェックボックスの制御
+    const menjoList = [
+      { box: 'menjo-zaimu', msg: 'menjo-msg-zaimu', inputs: ['zaimu1','zaimu2','zaimu3'] },
+      { box: 'menjo-kanri', msg: 'menjo-msg-kanri', inputs: ['kanri1','kanri2'] },
+      { box: 'menjo-kansa', msg: 'menjo-msg-kansa', inputs: ['kansa1','kansa2'] },
+      { box: 'menjo-hou', msg: 'menjo-msg-hou', inputs: ['hou1','hou2'] },
+      { box: 'menjo-sozei', msg: 'menjo-msg-sozei', inputs: ['sozei1','sozei2'] },
+      { box: 'menjo-sentaku', msg: 'menjo-msg-sentaku', inputs: ['sentaku1','sentaku2'] }
+    ];
+    menjoList.forEach(({box, msg, inputs}) => {
+      const cb = document.getElementById(box);
+      const msgDiv = document.getElementById(msg);
+      cb.addEventListener('change', function() {
+        if (cb.checked) {
+          msgDiv.style.display = '';
+          inputs.forEach(id => {
+            document.getElementById(id).disabled = true;
+            document.getElementById(id).value = '';
+          });
+        } else {
+          msgDiv.style.display = 'none';
+          inputs.forEach(id => {
+            document.getElementById(id).disabled = false;
+          });
         }
       });
     });
