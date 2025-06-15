@@ -422,28 +422,23 @@
       });
     });
 
-    document.getElementById('tweetBtn').addEventListener('click', async function() {
+    document.getElementById('tweetBtn').addEventListener('click', function() {
       const resultText = document.getElementById('result').textContent.trim();
       if (!resultText) {
         alert('先に計算してください。');
         return;
       }
-      // レーダーチャート画像をbase64で取得
-      const canvas = document.getElementById('radarChart');
-      const imageDataUrl = canvas.toDataURL('image/png');
-      // 画像を一時的にダウンロード
-      const link = document.createElement('a');
-      link.href = imageDataUrl;
-      link.download = 'hensachi_chart.png';
-      link.click();
       // X（Twitter）投稿用テキスト生成
       const url = location.href;
       const tweet = encodeURIComponent(resultText + '\n' + url + '\n#公認会計士 #偏差値計算');
-      // 画像はX公式Webから直接添付できないため、ダウンロード後に手動で添付する旨を案内
+      // Xアプリ優先で開くintentスキーム
+      const xIntentUrl = `twitter://post?message=${tweet}`;
       setTimeout(() => {
-        alert('レーダーチャート画像をダウンロードしました。X投稿画面で画像を添付してください。');
-        window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
-      }, 300);
+        window.location.href = xIntentUrl;
+        setTimeout(() => {
+          window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
+        }, 800);
+      }, 100);
     });
   </script>
 </body>
