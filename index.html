@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>公認会計士試験 偏差値計算アプリ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 420px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 1.5rem;
+    }
+    h1 {
+      font-size: 1.3rem;
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 1rem;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    button:active {
+      background: #0056b3;
+    }
+    .result {
+      text-align: center;
+      margin: 1.2rem 0 0.5rem 0;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .card {
+      background: #f3f6fa;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 1.08rem;
+      margin-bottom: 0.7rem;
+      color: #1a237e;
+    }
+    .card.kanri {
+      background: #fff7e0;
+      /* オレンジ寄りの黄色 */
+    }
+    .card.kansa {
+      background: #e0f4ff;
+      /* 水色 */
+    }
+    .card.hou {
+      background: #fffde0;
+      /* 黄色 */
+    }
+    .card.sozei {
+      background: #f3e0ff;
+      /* 紫色 */
+    }
+    .card.sentaku {
+      background: #e0ffe0;
+      /* 緑色 */
+    }
+    @media (max-width: 600px) {
+      .container {
+        margin: 0.5rem;
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>公認会計士試験 偏差値計算</h1>
+    <form id="hensachiForm" autocomplete="off">
+      <div class="card">
+        <div class="card-title">財務会計論</div>
+        <label for="zaimu1">大門１</label>
+        <input type="number" id="zaimu1" name="zaimu1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="zaimu2">大門２</label>
+        <input type="number" id="zaimu2" name="zaimu2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="zaimu3">大門３</label>
+        <input type="number" id="zaimu3" name="zaimu3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+      </div>
+      <div class="card kanri">
+        <div class="card-title">管理会計論</div>
+        <label for="kanri1">大門１</label>
+        <input type="number" id="kanri1" name="kanri1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="kanri2">大門２</label>
+        <input type="number" id="kanri2" name="kanri2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="kanri3">大門３</label>
+        <input type="number" id="kanri3" name="kanri3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+      </div>
+      <div class="card kansa">
+        <div class="card-title">監査論</div>
+        <label for="kansa1">大門１</label>
+        <input type="number" id="kansa1" name="kansa1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="kansa2">大門２</label>
+        <input type="number" id="kansa2" name="kansa2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="kansa3">大門３</label>
+        <input type="number" id="kansa3" name="kansa3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+      </div>
+      <div class="card hou">
+        <div class="card-title">企業法</div>
+        <label for="hou1">大門１</label>
+        <input type="number" id="hou1" name="hou1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="hou2">大門２</label>
+        <input type="number" id="hou2" name="hou2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="hou3">大門３</label>
+        <input type="number" id="hou3" name="hou3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+      </div>
+      <div class="card sozei">
+        <div class="card-title">租税法</div>
+        <label for="sozei1">大門１</label>
+        <input type="number" id="sozei1" name="sozei1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="sozei2">大門２</label>
+        <input type="number" id="sozei2" name="sozei2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="sozei3">大門３</label>
+        <input type="number" id="sozei3" name="sozei3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+      </div>
+      <div class="card sentaku">
+        <div class="card-title">選択科目（経営学）</div>
+        <label for="sentaku1">大門１</label>
+        <input type="number" id="sentaku1" name="sentaku1" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="sentaku2">大門２</label>
+        <input type="number" id="sentaku2" name="sentaku2" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+        <label for="sentaku3">大門３</label>
+        <input type="number" id="sentaku3" name="sentaku3" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
+      </div>
+      <button type="button" id="calcBtn">計算する</button>
+    </form>
+    <div class="result" id="result"></div>
+    <canvas id="radarChart" style="max-width:100%;"></canvas>
+  </div>
+  <script>
+    let chart = null;
+    document.getElementById('calcBtn').addEventListener('click', function() {
+      const subjects = [
+        { name: '財務会計論（大門１）', value: document.getElementById('zaimu1').value },
+        { name: '財務会計論（大門２）', value: document.getElementById('zaimu2').value },
+        { name: '財務会計論（大門３）', value: document.getElementById('zaimu3').value },
+        { name: '管理会計論（大門１）', value: document.getElementById('kanri1').value },
+        { name: '管理会計論（大門２）', value: document.getElementById('kanri2').value },
+        { name: '管理会計論（大門３）', value: document.getElementById('kanri3').value },
+        { name: '監査論（大門１）', value: document.getElementById('kansa1').value },
+        { name: '監査論（大門２）', value: document.getElementById('kansa2').value },
+        { name: '監査論（大門３）', value: document.getElementById('kansa3').value },
+        { name: '企業法（大門１）', value: document.getElementById('hou1').value },
+        { name: '企業法（大門２）', value: document.getElementById('hou2').value },
+        { name: '企業法（大門３）', value: document.getElementById('hou3').value },
+        { name: '租税法（大門１）', value: document.getElementById('sozei1').value },
+        { name: '租税法（大門２）', value: document.getElementById('sozei2').value },
+        { name: '租税法（大門３）', value: document.getElementById('sozei3').value },
+        { name: '経営学（大門１）', value: document.getElementById('sentaku1').value },
+        { name: '経営学（大門２）', value: document.getElementById('sentaku2').value },
+        { name: '経営学（大門３）', value: document.getElementById('sentaku3').value }
+      ];
+
+      // 入力値が空欄でないものだけ抽出
+      const filtered = subjects.filter(s => s.value !== '' && !isNaN(Number(s.value)));
+      if (filtered.length === 0) {
+        document.getElementById('result').textContent = '偏差値を1つ以上入力してください。';
+        if (chart) chart.destroy();
+        return;
+      }
+
+      // 偏差値の配列
+      const values = filtered.map(s => Number(s.value));
+      // 平均計算
+      const avg = values.reduce((a, b) => a + b, 0) / values.length;
+      document.getElementById('result').textContent = `総合偏差値：${avg.toFixed(2)}`;
+
+      // レーダーチャート描画
+      const ctx = document.getElementById('radarChart').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: filtered.map(s => s.name),
+          datasets: [{
+            label: '偏差値',
+            data: values,
+            backgroundColor: 'rgba(0,123,255,0.2)',
+            borderColor: 'rgba(0,123,255,1)',
+            pointBackgroundColor: 'rgba(0,123,255,1)',
+            pointRadius: 5,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            r: {
+              min: 30,
+              max: 80,
+              ticks: {
+                stepSize: 10,
+                color: '#666',
+                font: { size: 12 }
+              },
+              pointLabels: {
+                font: { size: 13 }
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
