@@ -117,6 +117,114 @@
         background: #e3f0ff;
         /* 青色 */
       }
+      /* アニメーション関連のスタイル */
+      .firework {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+      
+      .shake {
+        animation: shake 0.5s ease-in-out infinite;
+      }
+      
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+      
+      .bounce {
+        animation: bounce 0.8s ease-out;
+      }
+      
+      @keyframes bounce {
+        0% { transform: scale(1) translateY(0); }
+        50% { transform: scale(1.1) translateY(-10px); }
+        100% { transform: scale(1) translateY(0); }
+      }
+      
+      .celebration-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.95);
+        border: 3px solid #4caf50;
+        border-radius: 15px;
+        padding: 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2e7d32;
+        z-index: 1001;
+        animation: celebrationPop 1.5s ease-out;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      }
+      
+      .donmai-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 87, 87, 0.95);
+        border: 3px solid #f44336;
+        border-radius: 15px;
+        padding: 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        z-index: 1001;
+        animation: donmaiPop 2s ease-out;
+        box-shadow: 0 8px 32px rgba(244, 67, 54, 0.3);
+      }
+      
+      @keyframes celebrationPop {
+        0% { 
+          transform: translate(-50%, -50%) scale(0) rotate(0deg);
+          opacity: 0;
+        }
+        50% { 
+          transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+          opacity: 1;
+        }
+        100% { 
+          transform: translate(-50%, -50%) scale(0) rotate(360deg);
+          opacity: 0;
+        }
+      }
+      
+      @keyframes donmaiPop {
+        0% { 
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+        20% { 
+          transform: translate(-50%, -50%) scale(1.1);
+          opacity: 1;
+        }
+        80% { 
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        100% { 
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+      }
+      
+      .pulse {
+        animation: pulse 0.6s ease-in-out;
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+
       @media (max-width: 600px) {
         .container {
           margin: 0.5rem;
@@ -124,6 +232,11 @@
         }
         h1 {
           font-size: 1.1rem;
+        }
+        .celebration-message,
+        .donmai-message {
+          font-size: 1.2rem;
+          padding: 15px;
         }
       }
     </style>
@@ -305,6 +418,81 @@
       </button>
     </div>
     <script type="module">
+      // アニメーション関数群
+      function createFireworks() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+        const fireworksCount = 15;
+        
+        for (let i = 0; i < fireworksCount; i++) {
+          setTimeout(() => {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.left = Math.random() * window.innerWidth + 'px';
+            firework.style.top = Math.random() * window.innerHeight + 'px';
+            
+            document.body.appendChild(firework);
+            
+            // 花火の動きとフェードアウト
+            let opacity = 1;
+            let scale = 1;
+            const fadeInterval = setInterval(() => {
+              opacity -= 0.05;
+              scale += 0.1;
+              firework.style.opacity = opacity;
+              firework.style.transform = `scale(${scale})`;
+              
+              if (opacity <= 0) {
+                clearInterval(fadeInterval);
+                firework.remove();
+              }
+            }, 50);
+          }, i * 100);
+        }
+      }
+      
+      function showCelebrationMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'celebration-message';
+        messageDiv.textContent = message;
+        document.body.appendChild(messageDiv);
+        
+        setTimeout(() => {
+          messageDiv.remove();
+        }, 1500);
+      }
+      
+      function showDonmaiMessage() {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'donmai-message';
+        messageDiv.textContent = 'ドンマイ！ 💪 次は絶対いける！';
+        document.body.appendChild(messageDiv);
+        
+        // 画面を揺らす
+        document.body.classList.add('shake');
+        
+        setTimeout(() => {
+          messageDiv.remove();
+          document.body.classList.remove('shake');
+        }, 2000);
+      }
+      
+      function addButtonPulse(buttonId) {
+        const button = document.getElementById(buttonId);
+        button.classList.add('pulse');
+        setTimeout(() => {
+          button.classList.remove('pulse');
+        }, 600);
+      }
+      
+      function addResultBounce() {
+        const result = document.getElementById('result');
+        result.classList.add('bounce');
+        setTimeout(() => {
+          result.classList.remove('bounce');
+        }, 800);
+      }
+
       import { calcHensachi } from './hensachi-calc.js';
       let chart = null;
 
@@ -319,6 +507,9 @@
       }
 
       document.getElementById('calcBtn').addEventListener('click', function () {
+        // ボタンにパルスエフェクトを追加
+        addButtonPulse('calcBtn');
+        
         // 入力欄をすべて取得
         const inputIds = ['zaimu', 'kanri', 'kansa', 'hou', 'sozei', 'sentaku'];
         for (const id of inputIds) {
@@ -508,10 +699,31 @@
             '<span style="font-size:1.1em;color:#d32f2f;">' +
             message +
             '</span><br>';
+          // 足切りアニメーション
+          setTimeout(() => {
+            showDonmaiMessage();
+          }, 500);
         } else if (message) {
           html += `<span style="font-size:1.1em;color:#1976d2;">${message}</span><br>`;
+          // 成功アニメーション
+          setTimeout(() => {
+            if (totalHensachi >= 65) {
+              createFireworks();
+              showCelebrationMessage('🎉 天才爆誕！ 🎉');
+            } else if (totalHensachi >= 60) {
+              createFireworks();
+              showCelebrationMessage('🚀 すごいじゃん！ 🚀');
+            } else if (totalHensachi >= 55) {
+              showCelebrationMessage('🔥 その調子！ 🔥');
+            } else if (totalHensachi >= 52) {
+              showCelebrationMessage('😎 もうひと息！ 😎');
+            }
+          }, 300);
         }
         document.getElementById('result').innerHTML = html;
+        
+        // 結果表示にバウンスエフェクト
+        addResultBounce();
 
         // レーダーチャート描画
         const ctx = document.getElementById('radarChart').getContext('2d');
@@ -569,6 +781,10 @@
         });
         // シェアボタン表示
         document.getElementById('tweetBtn').style.display = '';
+        // シェアボタンにパルスエフェクト
+        setTimeout(() => {
+          addButtonPulse('tweetBtn');
+        }, 800);
       });
 
       // 免除チェックボックスの制御
@@ -602,6 +818,9 @@
       document
         .getElementById('tweetBtn')
         .addEventListener('click', function () {
+          // ボタンにパルスエフェクト
+          addButtonPulse('tweetBtn');
+          
           const resultText = document
             .getElementById('result')
             .textContent.trim();
