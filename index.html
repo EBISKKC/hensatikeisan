@@ -470,7 +470,7 @@
         let sogoLabel = '';
         let message = '';
         let tweetText = '';
-        let isAshikiri = values.some((v) => v <= 40);
+        let isAshikiri = values.some((v) => v < 40);
         const totalHensachi = Number(sogo.toFixed(2));
         sogoLabel = `総合偏差値：${totalHensachi}`;
         if (isAshikiri) {
