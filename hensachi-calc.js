@@ -6,15 +6,17 @@
  * @returns {{average: number, filteredLabels: string[], filteredValues: number[]}}
  */
 export function calcHensachi(subjects) {
-  const filtered = subjects.filter(s => s.value !== '' && !isNaN(Number(s.value)));
+  const filtered = subjects.filter(
+    (s) => s.value !== '' && !isNaN(Number(s.value))
+  );
   if (filtered.length === 0) {
     return { average: null, filteredLabels: [], filteredValues: [] };
   }
-  const values = filtered.map(s => Number(s.value));
+  const values = filtered.map((s) => Number(s.value));
   const avg = values.reduce((a, b) => a + b, 0) / values.length;
   return {
     average: avg,
-    filteredLabels: filtered.map(s => s.name),
-    filteredValues: values
+    filteredLabels: filtered.map((s) => s.name),
+    filteredValues: values,
   };
 }

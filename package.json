@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "fmt": "prettier --write ."
+  }
+}

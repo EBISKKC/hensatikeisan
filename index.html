@@ -1,498 +1,655 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>公認会計士試験 偏差値計算アプリ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 420px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      padding: 1.5rem;
-    }
-    h1 {
-      font-size: 1.3rem;
-      text-align: center;
-      margin-bottom: 1.2rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.2rem;
-      font-size: 1rem;
-    }
-    input[type="number"], select {
-      width: 100%;
-      padding: 0.6rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 0.8rem;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-bottom: 1rem;
-    }
-    button:active {
-      background: #0056b3;
-    }
-    .result {
-      text-align: center;
-      margin: 1.2rem 0 0.5rem 0;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #333;
-    }
-    .card {
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1.2rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    }
-    .card-title {
-      font-weight: bold;
-      font-size: 1.08rem;
-      margin-bottom: 0.7rem;
-      color: #1a237e;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .menjo-label {
-      font-weight: normal;
-      font-size: 0.98rem;
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 0.2em;
-    }
-    .menjo-message {
-      color: #2e7d32;
-      font-size: 1.3rem;
-      margin-bottom: 0.7rem;
-      text-align: left;
-      font-weight: bold;
-      text-align: center;
-    }
-    .card.kanri {
-      background: #fff7e0;
-      /* オレンジ寄りの黄色 */
-    }
-    .card.kansa {
-      background: #e0f4ff;
-      /* 水色 */
-    }
-    .card.hou {
-      background: #fffde0;
-      /* 黄色 */
-    }
-    .card.sozei {
-      background: #f3e0ff;
-      /* 紫色 */
-    }
-    .card.sentaku {
-      background: #e0ffe0;
-      /* 緑色 */
-    }
-    .card.zaimu {
-      background: #e3f0ff;
-      /* 青色 */
-    }
-    @media (max-width: 600px) {
+  <head>
+    <meta charset="UTF-8" />
+    <title>公認会計士試験 偏差値計算アプリ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <style>
+      body {
+        font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
       .container {
-        margin: 0.5rem;
-        padding: 1rem;
+        max-width: 420px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        padding: 1.5rem;
       }
       h1 {
+        font-size: 1.3rem;
+        text-align: center;
+        margin-bottom: 1.2rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.2rem;
+        font-size: 1rem;
+      }
+      input[type='number'],
+      select {
+        width: 100%;
+        padding: 0.6rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 0.8rem;
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
         font-size: 1.1rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
       }
-    }
-</style>
-<!-- Google tag (gtag.js) -->
-<script async defer src="https://www.googletagmanager.com/gtag/js?id=G-97XT4DG7G4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-97XT4DG7G4');
-</script>
-</head>
-<body>
-  <div class="container">
-    <h1>公認会計士試験 偏差値計算</h1>
-    <p style="text-align:center;">各科目の偏差値を入力し、計算ボタンを押してください。</p>
-    <p style="text-align:center;">※偏差値は半角数字で入力してください。</p>
-    <form id="hensachiForm" autocomplete="off">
-      <div class="card zaimu">
-        <div class="card-title">財務会計論
-          <label class="menjo-label"><input type="checkbox" id="menjo-zaimu">免除</label>
-        </div>
-        <div class="menjo-message" id="menjo-msg-zaimu" style="display:none;">免除</div>
-        <label for="zaimu">偏差値</label>
-        <input type="number" id="zaimu" name="zaimu" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-      </div>
-      <div class="card kanri">
-        <div class="card-title">管理会計論
-          <label class="menjo-label"><input type="checkbox" id="menjo-kanri">免除</label>
-        </div>
-        <div class="menjo-message" id="menjo-msg-kanri" style="display:none;">免除</div>
-        <label for="kanri">偏差値</label>
-        <input type="number" id="kanri" name="kanri" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-      </div>
-      <div class="card kansa">
-        <div class="card-title">監査論
-          <label class="menjo-label"><input type="checkbox" id="menjo-kansa">免除</label>
-        </div>
-        <div class="menjo-message" id="menjo-msg-kansa" style="display:none;">免除</div>
-        <label for="kansa">偏差値</label>
-        <input type="number" id="kansa" name="kansa" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-      </div>
-      <div class="card hou">
-        <div class="card-title">企業法
-          <label class="menjo-label"><input type="checkbox" id="menjo-hou">免除</label>
-        </div>
-        <div class="menjo-message" id="menjo-msg-hou" style="display:none;">免除</div>
-        <label for="hou">偏差値</label>
-        <input type="number" id="hou" name="hou" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-      </div>
-      <div class="card sozei">
-        <div class="card-title">租税法
-          <label class="menjo-label"><input type="checkbox" id="menjo-sozei">免除</label>
-        </div>
-        <div class="menjo-message" id="menjo-msg-sozei" style="display:none;">免除</div>
-        <label for="sozei">偏差値</label>
-        <input type="number" id="sozei" name="sozei" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-      </div>
-      <div class="card sentaku">
-        <div class="card-title">選択科目（経営学）
-          <label class="menjo-label"><input type="checkbox" id="menjo-sentaku">免除</label>
-        </div>
-        <div class="menjo-message" id="menjo-msg-sentaku" style="display:none;">免除</div>
-        <label for="sentaku">偏差値</label>
-        <input type="number" id="sentaku" name="sentaku" min="0" max="100" inputmode="decimal" placeholder="偏差値を入力">
-      </div>
-      <button type="button" id="calcBtn">計算する</button>
-    </form>
-    <div class="result" id="result"></div>
-    <canvas id="radarChart" style="max-width:100%;"></canvas>
-    <button type="button" id="tweetBtn" style="width:100%;background:#1da1f2;color:#fff;font-weight:bold;border:none;border-radius:6px;padding:0.7rem 0;margin-bottom:1.2rem;cursor:pointer;display:none;">結果をXでシェア</button>
-  </div>
-  <script type="module">
-    import { calcHensachi } from './hensachi-calc.js';
-    let chart = null;
-
-    function getNum(id) {
-      const v = document.getElementById(id).value;
-      return v === '' || isNaN(Number(v)) ? null : Number(v);
-    }
-
-    // 全角数字チェック用関数
-    function containsZenkakuNumber(str) {
-      return /[０-９]/.test(str);
-    }
-
-    document.getElementById('calcBtn').addEventListener('click', function() {
-      // 入力欄をすべて取得
-      const inputIds = [
-        'zaimu',
-        'kanri',
-        'kansa',
-        'hou',
-        'sozei',
-        'sentaku'
-      ];
-      for (const id of inputIds) {
-        const val = document.getElementById(id).value;
-        if (containsZenkakuNumber(val)) {
-          document.getElementById('result').textContent = '偏差値は半角数字で入力してください。';
-          if (chart) chart.destroy();
-          document.getElementById('tweetBtn').style.display = 'none';
-          return;
+      button:active {
+        background: #0056b3;
+      }
+      .result {
+        text-align: center;
+        margin: 1.2rem 0 0.5rem 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+      }
+      .card {
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.2rem;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      }
+      .card-title {
+        font-weight: bold;
+        font-size: 1.08rem;
+        margin-bottom: 0.7rem;
+        color: #1a237e;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .menjo-label {
+        font-weight: normal;
+        font-size: 0.98rem;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.2em;
+      }
+      .menjo-message {
+        color: #2e7d32;
+        font-size: 1.3rem;
+        margin-bottom: 0.7rem;
+        text-align: left;
+        font-weight: bold;
+        text-align: center;
+      }
+      .card.kanri {
+        background: #fff7e0;
+        /* オレンジ寄りの黄色 */
+      }
+      .card.kansa {
+        background: #e0f4ff;
+        /* 水色 */
+      }
+      .card.hou {
+        background: #fffde0;
+        /* 黄色 */
+      }
+      .card.sozei {
+        background: #f3e0ff;
+        /* 紫色 */
+      }
+      .card.sentaku {
+        background: #e0ffe0;
+        /* 緑色 */
+      }
+      .card.zaimu {
+        background: #e3f0ff;
+        /* 青色 */
+      }
+      @media (max-width: 600px) {
+        .container {
+          margin: 0.5rem;
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.1rem;
         }
       }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      defer
+      src="https://www.googletagmanager.com/gtag/js?id=G-97XT4DG7G4"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
 
-      // 入力値が未入力の科目があればエラー表示
-      let emptyInput = false;
-      for (const id of inputIds) {
-        const menjoId = id.replace(/^(zaimu|kanri|kansa|hou|sozei|sentaku)$/, 'menjo-$1');
-        const isMenjo = document.getElementById(menjoId).checked;
-        const val = document.getElementById(id).value;
-        if (!isMenjo && (val === '' || isNaN(Number(val)))) {
-          emptyInput = true;
-          break;
-        }
-      }
-      if (emptyInput) {
-        document.getElementById('result').textContent = '偏差値を入力してください。';
-        if (chart) chart.destroy();
-        document.getElementById('tweetBtn').style.display = 'none';
-        return;
-      }
-      for (const id of inputIds) {
-        const val = document.getElementById(id).value;
-        if (containsZenkakuNumber(val)) {
-          document.getElementById('result').textContent = '偏差値は半角数字で入力してください。';
-          if (chart) chart.destroy();
-          document.getElementById('tweetBtn').style.display = 'none';
-          return;
-        }
+      gtag('config', 'G-97XT4DG7G4');
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>公認会計士試験 偏差値計算</h1>
+      <p style="text-align: center">
+        各科目の偏差値を入力し、計算ボタンを押してください。
+      </p>
+      <p style="text-align: center">※偏差値は半角数字で入力してください。</p>
+      <form id="hensachiForm" autocomplete="off">
+        <div class="card zaimu">
+          <div class="card-title">
+            財務会計論
+            <label class="menjo-label"
+              ><input type="checkbox" id="menjo-zaimu" />免除</label
+            >
+          </div>
+          <div class="menjo-message" id="menjo-msg-zaimu" style="display: none">
+            免除
+          </div>
+          <label for="zaimu">偏差値</label>
+          <input
+            type="number"
+            id="zaimu"
+            name="zaimu"
+            min="0"
+            max="100"
+            inputmode="decimal"
+            placeholder="偏差値を入力"
+          />
+        </div>
+        <div class="card kanri">
+          <div class="card-title">
+            管理会計論
+            <label class="menjo-label"
+              ><input type="checkbox" id="menjo-kanri" />免除</label
+            >
+          </div>
+          <div class="menjo-message" id="menjo-msg-kanri" style="display: none">
+            免除
+          </div>
+          <label for="kanri">偏差値</label>
+          <input
+            type="number"
+            id="kanri"
+            name="kanri"
+            min="0"
+            max="100"
+            inputmode="decimal"
+            placeholder="偏差値を入力"
+          />
+        </div>
+        <div class="card kansa">
+          <div class="card-title">
+            監査論
+            <label class="menjo-label"
+              ><input type="checkbox" id="menjo-kansa" />免除</label
+            >
+          </div>
+          <div class="menjo-message" id="menjo-msg-kansa" style="display: none">
+            免除
+          </div>
+          <label for="kansa">偏差値</label>
+          <input
+            type="number"
+            id="kansa"
+            name="kansa"
+            min="0"
+            max="100"
+            inputmode="decimal"
+            placeholder="偏差値を入力"
+          />
+        </div>
+        <div class="card hou">
+          <div class="card-title">
+            企業法
+            <label class="menjo-label"
+              ><input type="checkbox" id="menjo-hou" />免除</label
+            >
+          </div>
+          <div class="menjo-message" id="menjo-msg-hou" style="display: none">
+            免除
+          </div>
+          <label for="hou">偏差値</label>
+          <input
+            type="number"
+            id="hou"
+            name="hou"
+            min="0"
+            max="100"
+            inputmode="decimal"
+            placeholder="偏差値を入力"
+          />
+        </div>
+        <div class="card sozei">
+          <div class="card-title">
+            租税法
+            <label class="menjo-label"
+              ><input type="checkbox" id="menjo-sozei" />免除</label
+            >
+          </div>
+          <div class="menjo-message" id="menjo-msg-sozei" style="display: none">
+            免除
+          </div>
+          <label for="sozei">偏差値</label>
+          <input
+            type="number"
+            id="sozei"
+            name="sozei"
+            min="0"
+            max="100"
+            inputmode="decimal"
+            placeholder="偏差値を入力"
+          />
+        </div>
+        <div class="card sentaku">
+          <div class="card-title">
+            選択科目（経営学）
+            <label class="menjo-label"
+              ><input type="checkbox" id="menjo-sentaku" />免除</label
+            >
+          </div>
+          <div
+            class="menjo-message"
+            id="menjo-msg-sentaku"
+            style="display: none"
+          >
+            免除
+          </div>
+          <label for="sentaku">偏差値</label>
+          <input
+            type="number"
+            id="sentaku"
+            name="sentaku"
+            min="0"
+            max="100"
+            inputmode="decimal"
+            placeholder="偏差値を入力"
+          />
+        </div>
+        <button type="button" id="calcBtn">計算する</button>
+      </form>
+      <div class="result" id="result"></div>
+      <canvas id="radarChart" style="max-width: 100%"></canvas>
+      <button
+        type="button"
+        id="tweetBtn"
+        style="
+          width: 100%;
+          background: #1da1f2;
+          color: #fff;
+          font-weight: bold;
+          border: none;
+          border-radius: 6px;
+          padding: 0.7rem 0;
+          margin-bottom: 1.2rem;
+          cursor: pointer;
+          display: none;
+        "
+      >
+        結果をXでシェア
+      </button>
+    </div>
+    <script type="module">
+      import { calcHensachi } from './hensachi-calc.js';
+      let chart = null;
+
+      function getNum(id) {
+        const v = document.getElementById(id).value;
+        return v === '' || isNaN(Number(v)) ? null : Number(v);
       }
 
-      // 免除判定
-      const menjo = {
-        zaimu: document.getElementById('menjo-zaimu').checked,
-        kanri: document.getElementById('menjo-kanri').checked,
-        kansa: document.getElementById('menjo-kansa').checked,
-        hou: document.getElementById('menjo-hou').checked,
-        sozei: document.getElementById('menjo-sozei').checked,
-        sentaku: document.getElementById('menjo-sentaku').checked
-      };
-
-      // 各科目の偏差値計算
-      let hensachi = {};
-      if (!menjo.kanri) {
-        const v = getNum('kanri');
-        hensachi['管理会計論'] = v !== null ? v : null;
-      } else {
-        hensachi['管理会計論'] = null;
-      }
-      if (!menjo.zaimu) {
-        const v = getNum('zaimu');
-        hensachi['財務会計論'] = v !== null ? v : null;
-      } else {
-        hensachi['財務会計論'] = null;
-      }
-      if (!menjo.kansa) {
-        const v = getNum('kansa');
-        hensachi['監査論'] = v !== null ? v : null;
-      } else {
-        hensachi['監査論'] = null;
-      }
-      if (!menjo.hou) {
-        const v = getNum('hou');
-        hensachi['企業法'] = v !== null ? v : null;
-      } else {
-        hensachi['企業法'] = null;
-      }
-      if (!menjo.sozei) {
-        const v = getNum('sozei');
-        hensachi['租税法'] = v !== null ? v : null;
-      } else {
-        hensachi['租税法'] = null;
-      }
-      if (!menjo.sentaku) {
-        const v = getNum('sentaku');
-        hensachi['経営学'] = v !== null ? v : null;
-      } else {
-        hensachi['経営学'] = null;
+      // 全角数字チェック用関数
+      function containsZenkakuNumber(str) {
+        return /[０-９]/.test(str);
       }
 
-      // 総合偏差値計算
-      let kanri = hensachi['管理会計論'];
-      let zaimu = hensachi['財務会計論'];
-      let kansa = hensachi['監査論'];
-      let hou = hensachi['企業法'];
-      let sozei = hensachi['租税法'];
-      let sentaku = hensachi['経営学'];
-      let sogo = null;
-      let sogo_n = 0;
-      let sogo_sum = 0;
-      if (kanri !== null) { sogo_sum += kanri; sogo_n += 1; }
-      if (zaimu !== null) { sogo_sum += zaimu*2; sogo_n += 2; }
-      if (kansa !== null) { sogo_sum += kansa; sogo_n += 1; }
-      if (hou !== null) { sogo_sum += hou; sogo_n += 1; }
-      if (sozei !== null) { sogo_sum += sozei; sogo_n += 1; }
-      if (sentaku !== null) { sogo_sum += sentaku; sogo_n += 1; }
-      if (sogo_n > 0) {
-        sogo = sogo_sum / sogo_n;
-      }
-
-      // 表示用データ作成
-      const labels = [];
-      const values = [];
-      for (const key of ['管理会計論','財務会計論','監査論','企業法','租税法','経営学']) {
-        if (hensachi[key] !== null) {
-          labels.push(key);
-          values.push(Number(hensachi[key].toFixed(2)));
-        }
-      }
-      let sogoLabel = '';
-      let message = '';
-      let tweetText = '';
-      if (sogo !== null) {
-        const totalHensachi = Number(sogo.toFixed(2));
-        sogoLabel = `総合偏差値：${totalHensachi}`;
-        if (totalHensachi >= 65) {
-          message = "やるやん！天才爆誕！？🎉";
-          tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 60) {
-          message = "いいね！このまま突っ走れ～💨";
-          tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 55) {
-          message = "ジワジワきてる、その調子🔥";
-          tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 52) {
-          message = "もうひと伸び！次の自分に期待😎";
-          tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 50) {
-          message = "おしい！あとちょっとでゾーン突入🚀";
-          tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
-        } else {
-          message = "まだまだここから！レベチ目指してリベンジ🔥";
-          tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
-        }
-      }
-
-      // 結果表示
-      let html = '';
-      if (sogoLabel) {
-        html += sogoLabel + '<br>';
-      }
-      if (message) {
-        html += `<span style="font-size:1.1em;color:#1976d2;">${message}</span><br>`;
-      }
-      document.getElementById('result').innerHTML = html;
-
-      // レーダーチャート描画
-      const ctx = document.getElementById('radarChart').getContext('2d');
-      if (chart) chart.destroy();
-      // カード色と同じ色をラベルに適用
-      const labelColors = {
-        '管理会計論': '#e6a100', // 濃いオレンジ
-        '財務会計論': '#1976d2', // 濃い青
-        '監査論': '#0288d1', // 濃い水色
-        '企業法': '#bfa800', // 濃い黄色
-        '租税法': '#8e24aa', // 濃い紫
-        '経営学': '#388e3c' // 濃い緑
-      };
-      chart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: '偏差値',
-            data: values,
-            backgroundColor: 'rgba(0,123,255,0.2)',
-            borderColor: 'rgba(0,123,255,1)',
-            pointBackgroundColor: 'rgba(0,123,255,1)',
-            pointRadius: 5,
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            r: {
-              min: 20,
-              max: 70,
-              ticks: {
-                stepSize: 10,
-                color: '#666',
-                font: { size: 12 }
-              },
-              pointLabels: {
-                font: { size: 13 },
-                color: function(context) {
-                  const idx = context.index;
-                  const label = context.chart.data.labels[idx];
-                  return labelColors[label] || '#222';
-                }
-              }
-            }
+      document.getElementById('calcBtn').addEventListener('click', function () {
+        // 入力欄をすべて取得
+        const inputIds = ['zaimu', 'kanri', 'kansa', 'hou', 'sozei', 'sentaku'];
+        for (const id of inputIds) {
+          const val = document.getElementById(id).value;
+          if (containsZenkakuNumber(val)) {
+            document.getElementById('result').textContent =
+              '偏差値は半角数字で入力してください。';
+            if (chart) chart.destroy();
+            document.getElementById('tweetBtn').style.display = 'none';
+            return;
           }
         }
-      });
-      // シェアボタン表示
-      document.getElementById('tweetBtn').style.display = '';
-    });
 
-    // 免除チェックボックスの制御
-    const menjoList = [
-      { box: 'menjo-zaimu', msg: 'menjo-msg-zaimu', inputs: ['zaimu'] },
-      { box: 'menjo-kanri', msg: 'menjo-msg-kanri', inputs: ['kanri'] },
-      { box: 'menjo-kansa', msg: 'menjo-msg-kansa', inputs: ['kansa'] },
-      { box: 'menjo-hou', msg: 'menjo-msg-hou', inputs: ['hou'] },
-      { box: 'menjo-sozei', msg: 'menjo-msg-sozei', inputs: ['sozei'] },
-      { box: 'menjo-sentaku', msg: 'menjo-msg-sentaku', inputs: ['sentaku'] }
-    ];
-    menjoList.forEach(({box, msg, inputs}) => {
-      const cb = document.getElementById(box);
-      const msgDiv = document.getElementById(msg);
-      cb.addEventListener('change', function() {
-        if (cb.checked) {
-          msgDiv.style.display = '';
-          inputs.forEach(id => {
-            document.getElementById(id).disabled = true;
-            document.getElementById(id).value = '';
-          });
-        } else {
-          msgDiv.style.display = 'none';
-          inputs.forEach(id => {
-            document.getElementById(id).disabled = false;
-          });
+        // 入力値が未入力の科目があればエラー表示
+        let emptyInput = false;
+        for (const id of inputIds) {
+          const menjoId = id.replace(
+            /^(zaimu|kanri|kansa|hou|sozei|sentaku)$/,
+            'menjo-$1'
+          );
+          const isMenjo = document.getElementById(menjoId).checked;
+          const val = document.getElementById(id).value;
+          if (!isMenjo && (val === '' || isNaN(Number(val)))) {
+            emptyInput = true;
+            break;
+          }
         }
-      });
-    });
+        if (emptyInput) {
+          document.getElementById('result').textContent =
+            '偏差値を入力してください。';
+          if (chart) chart.destroy();
+          document.getElementById('tweetBtn').style.display = 'none';
+          return;
+        }
+        for (const id of inputIds) {
+          const val = document.getElementById(id).value;
+          if (containsZenkakuNumber(val)) {
+            document.getElementById('result').textContent =
+              '偏差値は半角数字で入力してください。';
+            if (chart) chart.destroy();
+            document.getElementById('tweetBtn').style.display = 'none';
+            return;
+          }
+        }
 
-    document.getElementById('tweetBtn').addEventListener('click', function() {
-      const resultText = document.getElementById('result').textContent.trim();
-      if (!resultText) {
-        alert('先に計算してください。');
-        return;
-      }
-      // 総合偏差値に応じたtweetTextを再生成
-      let tweetText = '';
-      const sogoText = document.getElementById('result').textContent.match(/総合偏差値：([0-9.]+)/);
-      let totalHensachi = sogoText ? Number(sogoText[1]) : null;
-      if (totalHensachi !== null) {
-        if (totalHensachi >= 65) {
-          tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 60) {
-          tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 55) {
-          tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 52) {
-          tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
-        } else if (totalHensachi >= 50) {
-          tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
+        // 免除判定
+        const menjo = {
+          zaimu: document.getElementById('menjo-zaimu').checked,
+          kanri: document.getElementById('menjo-kanri').checked,
+          kansa: document.getElementById('menjo-kansa').checked,
+          hou: document.getElementById('menjo-hou').checked,
+          sozei: document.getElementById('menjo-sozei').checked,
+          sentaku: document.getElementById('menjo-sentaku').checked,
+        };
+
+        // 各科目の偏差値計算
+        let hensachi = {};
+        if (!menjo.kanri) {
+          const v = getNum('kanri');
+          hensachi['管理会計論'] = v !== null ? v : null;
         } else {
-          tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
+          hensachi['管理会計論'] = null;
         }
-      } else {
-        tweetText = resultText + '\n' + location.href + '\n#公認会計士 #偏差値計算';
-      }
-      // Xアプリ優先で開くintentスキーム
-      const tweet = encodeURIComponent(tweetText + '\n' + location.href);
-      const xIntentUrl = `twitter://post?message=${tweet}`;
-      setTimeout(() => {
-        window.location.href = xIntentUrl;
-        setTimeout(() => {
-          window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
-        }, 800);
-      }, 100);
-    });
-  </script>
-</body>
+        if (!menjo.zaimu) {
+          const v = getNum('zaimu');
+          hensachi['財務会計論'] = v !== null ? v : null;
+        } else {
+          hensachi['財務会計論'] = null;
+        }
+        if (!menjo.kansa) {
+          const v = getNum('kansa');
+          hensachi['監査論'] = v !== null ? v : null;
+        } else {
+          hensachi['監査論'] = null;
+        }
+        if (!menjo.hou) {
+          const v = getNum('hou');
+          hensachi['企業法'] = v !== null ? v : null;
+        } else {
+          hensachi['企業法'] = null;
+        }
+        if (!menjo.sozei) {
+          const v = getNum('sozei');
+          hensachi['租税法'] = v !== null ? v : null;
+        } else {
+          hensachi['租税法'] = null;
+        }
+        if (!menjo.sentaku) {
+          const v = getNum('sentaku');
+          hensachi['経営学'] = v !== null ? v : null;
+        } else {
+          hensachi['経営学'] = null;
+        }
+
+        // 総合偏差値計算
+        let kanri = hensachi['管理会計論'];
+        let zaimu = hensachi['財務会計論'];
+        let kansa = hensachi['監査論'];
+        let hou = hensachi['企業法'];
+        let sozei = hensachi['租税法'];
+        let sentaku = hensachi['経営学'];
+        let sogo = null;
+        let sogo_n = 0;
+        let sogo_sum = 0;
+        if (kanri !== null) {
+          sogo_sum += kanri;
+          sogo_n += 1;
+        }
+        if (zaimu !== null) {
+          sogo_sum += zaimu * 2;
+          sogo_n += 2;
+        }
+        if (kansa !== null) {
+          sogo_sum += kansa;
+          sogo_n += 1;
+        }
+        if (hou !== null) {
+          sogo_sum += hou;
+          sogo_n += 1;
+        }
+        if (sozei !== null) {
+          sogo_sum += sozei;
+          sogo_n += 1;
+        }
+        if (sentaku !== null) {
+          sogo_sum += sentaku;
+          sogo_n += 1;
+        }
+        if (sogo_n > 0) {
+          sogo = sogo_sum / sogo_n;
+        }
+
+        // 表示用データ作成
+        const labels = [];
+        const values = [];
+        for (const key of [
+          '管理会計論',
+          '財務会計論',
+          '監査論',
+          '企業法',
+          '租税法',
+          '経営学',
+        ]) {
+          if (hensachi[key] !== null) {
+            labels.push(key);
+            values.push(Number(hensachi[key].toFixed(2)));
+          }
+        }
+        let sogoLabel = '';
+        let message = '';
+        let tweetText = '';
+        let isAshikiri = values.some((v) => v <= 40);
+        const totalHensachi = Number(sogo.toFixed(2));
+        sogoLabel = `総合偏差値：${totalHensachi}`;
+        if (isAshikiri) {
+          message = '足切りです☠️';
+          tweetText = `総合偏差値：${totalHensachi}!残念ながら、足切りです... #会計士 #偏差値計`;
+        } else if (sogo !== null) {
+          if (totalHensachi >= 65) {
+            message = 'やるやん！天才爆誕！？🎉';
+            tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
+          } else if (totalHensachi >= 60) {
+            message = 'いいね！このまま突っ走れ～💨';
+            tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
+          } else if (totalHensachi >= 55) {
+            message = 'ジワジワきてる、その調子🔥';
+            tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
+          } else if (totalHensachi >= 52) {
+            message = 'もうひと伸び！次の自分に期待😎';
+            tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
+          } else if (totalHensachi >= 50) {
+            message = 'おしい！あとちょっとでゾーン突入🚀';
+            tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
+          } else {
+            message = 'まだまだここから！レベチ目指してリベンジ🔥';
+            tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
+          }
+        }
+
+        // 結果表示
+        let html = '';
+        if (sogoLabel) {
+          html += sogoLabel + '<br>';
+        }
+        if (isAshikiri) {
+          html +=
+            '<span style="font-size:1.1em;color:#d32f2f;">' +
+            message +
+            '</span><br>';
+        } else if (message) {
+          html += `<span style="font-size:1.1em;color:#1976d2;">${message}</span><br>`;
+        }
+        document.getElementById('result').innerHTML = html;
+
+        // レーダーチャート描画
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        if (chart) chart.destroy();
+        // カード色と同じ色をラベルに適用
+        const labelColors = {
+          管理会計論: '#e6a100', // 濃いオレンジ
+          財務会計論: '#1976d2', // 濃い青
+          監査論: '#0288d1', // 濃い水色
+          企業法: '#bfa800', // 濃い黄色
+          租税法: '#8e24aa', // 濃い紫
+          経営学: '#388e3c', // 濃い緑
+        };
+        chart = new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '偏差値',
+                data: values,
+                backgroundColor: 'rgba(0,123,255,0.2)',
+                borderColor: 'rgba(0,123,255,1)',
+                pointBackgroundColor: 'rgba(0,123,255,1)',
+                pointRadius: 5,
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+            },
+            scales: {
+              r: {
+                min: 20,
+                max: 70,
+                ticks: {
+                  stepSize: 10,
+                  color: '#666',
+                  font: { size: 12 },
+                },
+                pointLabels: {
+                  font: { size: 13 },
+                  color: function (context) {
+                    const idx = context.index;
+                    const label = context.chart.data.labels[idx];
+                    return labelColors[label] || '#222';
+                  },
+                },
+              },
+            },
+          },
+        });
+        // シェアボタン表示
+        document.getElementById('tweetBtn').style.display = '';
+      });
+
+      // 免除チェックボックスの制御
+      const menjoList = [
+        { box: 'menjo-zaimu', msg: 'menjo-msg-zaimu', inputs: ['zaimu'] },
+        { box: 'menjo-kanri', msg: 'menjo-msg-kanri', inputs: ['kanri'] },
+        { box: 'menjo-kansa', msg: 'menjo-msg-kansa', inputs: ['kansa'] },
+        { box: 'menjo-hou', msg: 'menjo-msg-hou', inputs: ['hou'] },
+        { box: 'menjo-sozei', msg: 'menjo-msg-sozei', inputs: ['sozei'] },
+        { box: 'menjo-sentaku', msg: 'menjo-msg-sentaku', inputs: ['sentaku'] },
+      ];
+      menjoList.forEach(({ box, msg, inputs }) => {
+        const cb = document.getElementById(box);
+        const msgDiv = document.getElementById(msg);
+        cb.addEventListener('change', function () {
+          if (cb.checked) {
+            msgDiv.style.display = '';
+            inputs.forEach((id) => {
+              document.getElementById(id).disabled = true;
+              document.getElementById(id).value = '';
+            });
+          } else {
+            msgDiv.style.display = 'none';
+            inputs.forEach((id) => {
+              document.getElementById(id).disabled = false;
+            });
+          }
+        });
+      });
+
+      document
+        .getElementById('tweetBtn')
+        .addEventListener('click', function () {
+          const resultText = document
+            .getElementById('result')
+            .textContent.trim();
+          if (!resultText) {
+            alert('先に計算してください。');
+            return;
+          }
+          // 総合偏差値に応じたtweetTextを再生成
+          let tweetText = '';
+          const sogoText = document
+            .getElementById('result')
+            .textContent.match(/総合偏差値：([0-9.]+)/);
+          let totalHensachi = sogoText ? Number(sogoText[1]) : null;
+          // 足切り判定
+          const resultDiv = document.getElementById('result');
+          if (resultDiv.innerHTML.includes('足切りです')) {
+            tweetText = `総合偏差値：${totalHensachi}!残念ながら、足切りです... #会計士 #偏差値計算`;
+          } else if (totalHensachi !== null) {
+            if (totalHensachi >= 65) {
+              tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
+            } else if (totalHensachi >= 60) {
+              tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
+            } else if (totalHensachi >= 55) {
+              tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
+            } else if (totalHensachi >= 52) {
+              tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
+            } else if (totalHensachi >= 50) {
+              tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
+            } else {
+              tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
+            }
+          } else {
+            tweetText =
+              resultText + '\n' + location.href + '\n#公認会計士 #偏差値計算';
+          }
+          // Xアプリ優先で開くintentスキーム
+          const tweet = encodeURIComponent(tweetText + '\n' + location.href);
+          const xIntentUrl = `twitter://post?message=${tweet}`;
+          setTimeout(() => {
+            window.location.href = xIntentUrl;
+            setTimeout(() => {
+              window.open(
+                `https://twitter.com/intent/tweet?text=${tweet}`,
+                '_blank'
+              );
+            }, 800);
+          }, 100);
+        });
+    </script>
+  </body>
 </html>
