@@ -475,11 +475,11 @@
         sogoLabel = `総合偏差値：${totalHensachi}`;
         if (isAshikiri) {
           message = '足切りです☠️';
-          tweetText = `総合偏差値：${totalHensachi}！残念ながら、足切りです... #会計士 #偏差値計`;
+          tweetText = `総合偏差値：${totalHensachi}！残念ながら、足切りです...☠️ #会計士 #偏差値計`;
         } else if (sogo !== null) {
           if (totalHensachi >= 65) {
             message = 'やるやん！天才爆誕！？🎉';
-            tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
+            tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？🤯 #会計士 #偏差値計算`;
           } else if (totalHensachi >= 60) {
             message = 'いいね！このまま突っ走れ～💨';
             tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
@@ -618,10 +618,10 @@
           // 足切り判定
           const resultDiv = document.getElementById('result');
           if (resultDiv.innerHTML.includes('足切りです')) {
-            tweetText = `総合偏差値：${totalHensachi}、残念ながら、足切りです... #会計士 #偏差値計算`;
+            tweetText = `総合偏差値：${totalHensachi}、残念ながら、足切りです...☠️ #会計士 #偏差値計算`;
           } else if (totalHensachi !== null) {
             if (totalHensachi >= 65) {
-              tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？ #会計士 #偏差値計算`;
+              tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？🤯 #会計士 #偏差値計算`;
             } else if (totalHensachi >= 60) {
               tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
             } else if (totalHensachi >= 55) {
