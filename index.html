@@ -518,49 +518,31 @@
           }
         }
         let sogoLabel = '';
-        let message = '';
         let tweetText = '';
         let isAshikiri = values.some((v) => v < 40);
         const totalHensachi = Number(sogo.toFixed(2));
         sogoLabel = `総合偏差値：${totalHensachi}`;
         if (isAshikiri) {
-          message = '足切りです☠️';
           tweetText = `総合偏差値：${totalHensachi}！残念ながら、足切りです...☠️ #会計士 #偏差値計`;
         } else if (sogo !== null) {
           if (totalHensachi >= 65) {
-            message = 'やるやん！天才爆誕！？🎉';
             tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？🤯 #会計士 #偏差値計算`;
           } else if (totalHensachi >= 60) {
-            message = 'いいね！このまま突っ走れ～💨';
             tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
           } else if (totalHensachi >= 55) {
-            message = 'ジワジワきてる、その調子🔥';
             tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
           } else if (totalHensachi >= 52) {
-            message = 'もうひと伸び！次の自分に期待😎';
             tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
           } else if (totalHensachi >= 50) {
-            message = 'おしい！あとちょっとでゾーン突入🚀';
             tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
           } else {
-            message = 'まだまだここから！レベチ目指してリベンジ🔥';
             tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
           }
         }
 
         // 結果表示
         let html = '';
-        if (sogoLabel) {
-          html += sogoLabel + '<br>';
-        }
-        if (isAshikiri) {
-          html +=
-            '<span style="font-size:1.1em;color:#d32f2f;">' +
-            message +
-            '</span><br>';
-        } else if (message) {
-          html += `<span style="font-size:1.1em;color:#1976d2;">${message}</span><br>`;
-        }
+        html += `<div class="result">${sogoLabel}</div>`;
         document.getElementById('result').innerHTML = html;
 
         // レーダーチャート描画
