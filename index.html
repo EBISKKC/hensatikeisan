@@ -52,21 +52,38 @@
       }
       button {
         width: 100%;
-        padding: 0.8rem;
-        background: #007bff;
+        padding: 0.9rem 1.5rem;
+        background: #2c3e50;
         color: #fff;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 1.1rem;
         font-weight: 600;
         font-family: inherit;
         cursor: pointer;
         margin-bottom: 1rem;
         letter-spacing: 0.005em;
+        box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2);
+        transition: all 0.2s ease;
+      }
+      button:hover {
+        background: #34495e;
+        box-shadow: 0 3px 8px rgba(44, 62, 80, 0.3);
       }
       button:active {
-        background: #0056b3;
+        background: #2c3e50;
+        box-shadow: 0 1px 3px rgba(44, 62, 80, 0.3);
+        transform: translateY(1px);
       }
+      button:focus {
+        outline: none;
+        box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2), 0 0 0 3px rgba(52, 152, 219, 0.3);
+      }
+
+      #tweetBtn {
+        display: none;
+      }
+
       .result {
         text-align: center;
         margin: 1.2rem 0 0.5rem 0;
@@ -112,8 +129,8 @@
         padding: 20px;
         border-radius: 8px;
         margin: 15px 0;
-        border-right: none;
-        border-image: none;
+        border: 1px solid orange;
+        /* 明るいオレンジの枠線 */
         box-shadow: inset 8px 0 0 orange;
       }
       .card.kansa {
@@ -121,8 +138,8 @@
         padding: 20px;
         border-radius: 8px;
         margin: 15px 0;
-        border-right: none;
-        border-image: none;
+        border: 1px solid #0288d1;
+
         box-shadow: inset 8px 0 0 #0288d1;
         /* 水色 */
       }
@@ -131,8 +148,7 @@
         padding: 20px;
         border-radius: 8px;
         margin: 15px 0;
-        border-right: none;
-        border-image: none;
+        border: 1px solid #bfa800;
         box-shadow: inset 8px 0 0 #bfa800;
         /* 黄色 */
       }
@@ -141,8 +157,7 @@
         padding: 20px;
         border-radius: 8px;
         margin: 15px 0;
-        border-right: none;
-        border-image: none;
+        border: 1px solid #8e24aa;
         box-shadow: inset 8px 0 0 #8e24aa;
         /* 紫色 */
       }
@@ -151,8 +166,7 @@
         padding: 20px;
         border-radius: 8px;
         margin: 15px 0;
-        border-right: none;
-        border-image: none;
+        border: 1px solid #388e3c;
         box-shadow: inset 8px 0 0 #388e3c;
         /* 緑色 */
       }
@@ -161,8 +175,7 @@
         padding: 20px;
         border-radius: 8px;
         margin: 15px 0;
-        border-right: none;
-        border-image: none;
+        border: 1px solid #d32f2f;
         box-shadow: inset 8px 0 0 #d32f2f;
         /* 赤色 */
       }
@@ -334,23 +347,7 @@
       </form>
       <div class="result" id="result"></div>
       <canvas id="radarChart" style="max-width: 100%"></canvas>
-      <button
-        type="button"
-        id="tweetBtn"
-        style="
-          width: 100%;
-          background: #1da1f2;
-          color: #fff;
-          font-weight: bold;
-          font-family: 'Crimson Text', 'Noto Serif JP', serif;
-          border: none;
-          border-radius: 6px;
-          padding: 0.7rem 0;
-          margin-bottom: 1.2rem;
-          cursor: pointer;
-          display: none;
-        "
-      >
+      <button type="button" id="tweetBtn">
         結果をXでシェア
       </button>
     </div>
@@ -563,13 +560,13 @@
             labels: labels,
             datasets: [
               {
-                label: '偏差値',
-                data: values,
-                backgroundColor: 'rgba(0,123,255,0.2)',
-                borderColor: 'rgba(0,123,255,1)',
-                pointBackgroundColor: 'rgba(0,123,255,1)',
-                pointRadius: 5,
-                borderWidth: 2,
+          label: '偏差値',
+          data: values,
+          backgroundColor: 'rgba(0,123,255,0.2)',
+          borderColor: 'rgba(0,123,255,1)',
+          pointBackgroundColor: 'rgba(0,123,255,1)',
+          pointRadius: 5,
+          borderWidth: 2,
               },
             ],
           },
@@ -580,33 +577,88 @@
             },
             scales: {
               r: {
-                min: 20,
-                max: 70,
-                ticks: {
-                  stepSize: 10,
-                  color: '#666',
-                  font: { 
-                    size: 12,
-                    family: "'Crimson Text', 'Noto Serif JP', serif"
-                  },
-                },
-                pointLabels: {
-                  font: { 
-                    size: 13,
-                    family: "'Crimson Text', 'Noto Serif JP', serif"
-                  },
-                  color: function (context) {
-                    const idx = context.index;
-                    const label = context.chart.data.labels[idx];
-                    return labelColors[label] || '#222';
-                  },
-                },
+          min: 20,
+          max: 70,
+          ticks: {
+            stepSize: 10,
+            color: '#666',
+            font: { 
+              size: 12,
+              family: "'Crimson Text', 'Noto Serif JP', serif"
+            },
+          },
+          pointLabels: {
+            font: { 
+              size: 13,
+              family: "'Crimson Text', 'Noto Serif JP', serif"
+            },
+            color: function (context) {
+              const idx = context.index;
+              const label = context.chart.data.labels[idx];
+              return labelColors[label] || '#222';
+            },
+          },
               },
             },
           },
+          plugins: [{
+            id: 'valueDisplay',
+            afterDatasetsDraw: function(chart) {
+              const ctx = chart.ctx;
+              const data = chart.data.datasets[0].data;
+              const labels = chart.data.labels;
+              
+              ctx.save();
+              ctx.font = "bold 14px 'Crimson Text', 'Noto Serif JP', serif";
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              
+              data.forEach((value, index) => {
+          const meta = chart.getDatasetMeta(0);
+          const point = meta.data[index];
+          
+          if (point && value !== null && value !== undefined) {
+            // ポイントの座標を取得
+            const x = point.x;
+            const y = point.y;
+            
+            // 中心からの角度を計算
+            const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+            const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+            
+            const angle = Math.atan2(y - centerY, x - centerX);
+            
+            // 偏差値を表示する位置を調整（ポイントから少し外側）
+            const offsetDistance = 20;
+            const textX = x + Math.cos(angle) * offsetDistance;
+            const textY = y + Math.sin(angle) * offsetDistance;
+            
+            // 背景の円を描画
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.arc(textX, textY, 12, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 枠線を描画（科目名の色を使用）
+            const label = labels[index];
+            ctx.strokeStyle = labelColors[label] || 'rgba(0,123,255,0.8)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(textX, textY, 12, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // 偏差値の数値を描画
+            ctx.fillStyle = '#333';
+            ctx.fillText(value.toString(), textX, textY);
+          }
+              });
+              
+              ctx.restore();
+            }
+          }]
         });
         // シェアボタン表示
-        document.getElementById('tweetBtn').style.display = '';
+        document.getElementById('tweetBtn').style.display = 'block';
       });
 
       // 免除チェックボックスの制御
