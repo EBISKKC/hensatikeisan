@@ -52,21 +52,38 @@
       }
       button {
         width: 100%;
-        padding: 0.8rem;
-        background: #007bff;
+        padding: 0.9rem 1.5rem;
+        background: #2c3e50;
         color: #fff;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 1.1rem;
         font-weight: 600;
         font-family: inherit;
         cursor: pointer;
         margin-bottom: 1rem;
         letter-spacing: 0.005em;
+        box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2);
+        transition: all 0.2s ease;
+      }
+      button:hover {
+        background: #34495e;
+        box-shadow: 0 3px 8px rgba(44, 62, 80, 0.3);
       }
       button:active {
-        background: #0056b3;
+        background: #2c3e50;
+        box-shadow: 0 1px 3px rgba(44, 62, 80, 0.3);
+        transform: translateY(1px);
       }
+      button:focus {
+        outline: none;
+        box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2), 0 0 0 3px rgba(52, 152, 219, 0.3);
+      }
+
+      #tweetBtn {
+        display: none;
+      }
+
       .result {
         text-align: center;
         margin: 1.2rem 0 0.5rem 0;
@@ -330,23 +347,7 @@
       </form>
       <div class="result" id="result"></div>
       <canvas id="radarChart" style="max-width: 100%"></canvas>
-      <button
-        type="button"
-        id="tweetBtn"
-        style="
-          width: 100%;
-          background: #1da1f2;
-          color: #fff;
-          font-weight: bold;
-          font-family: 'Crimson Text', 'Noto Serif JP', serif;
-          border: none;
-          border-radius: 6px;
-          padding: 0.7rem 0;
-          margin-bottom: 1.2rem;
-          cursor: pointer;
-          display: none;
-        "
-      >
+      <button type="button" id="tweetBtn">
         結果をXでシェア
       </button>
     </div>
@@ -658,7 +659,7 @@
           }]
         });
         // シェアボタン表示
-        document.getElementById('tweetBtn').style.display = '';
+        document.getElementById('tweetBtn').style.display = 'block';
       });
 
       // 免除チェックボックスの制御
