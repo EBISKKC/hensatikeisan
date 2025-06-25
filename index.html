@@ -560,13 +560,13 @@
             labels: labels,
             datasets: [
               {
-                label: '偏差値',
-                data: values,
-                backgroundColor: 'rgba(0,123,255,0.2)',
-                borderColor: 'rgba(0,123,255,1)',
-                pointBackgroundColor: 'rgba(0,123,255,1)',
-                pointRadius: 5,
-                borderWidth: 2,
+          label: '偏差値',
+          data: values,
+          backgroundColor: 'rgba(0,123,255,0.2)',
+          borderColor: 'rgba(0,123,255,1)',
+          pointBackgroundColor: 'rgba(0,123,255,1)',
+          pointRadius: 5,
+          borderWidth: 2,
               },
             ],
           },
@@ -574,34 +574,30 @@
             responsive: true,
             plugins: {
               legend: { display: false },
-              // 科目ごとの偏差値を表示するプラグイン
-              valueDisplay: {
-                display: true
-              }
             },
             scales: {
               r: {
-                min: 20,
-                max: 70,
-                ticks: {
-                  stepSize: 10,
-                  color: '#666',
-                  font: { 
-                    size: 12,
-                    family: "'Crimson Text', 'Noto Serif JP', serif"
-                  },
-                },
-                pointLabels: {
-                  font: { 
-                    size: 13,
-                    family: "'Crimson Text', 'Noto Serif JP', serif"
-                  },
-                  color: function (context) {
-                    const idx = context.index;
-                    const label = context.chart.data.labels[idx];
-                    return labelColors[label] || '#222';
-                  },
-                },
+          min: 20,
+          max: 70,
+          ticks: {
+            stepSize: 10,
+            color: '#666',
+            font: { 
+              size: 12,
+              family: "'Crimson Text', 'Noto Serif JP', serif"
+            },
+          },
+          pointLabels: {
+            font: { 
+              size: 13,
+              family: "'Crimson Text', 'Noto Serif JP', serif"
+            },
+            color: function (context) {
+              const idx = context.index;
+              const label = context.chart.data.labels[idx];
+              return labelColors[label] || '#222';
+            },
+          },
               },
             },
           },
@@ -618,40 +614,43 @@
               ctx.textBaseline = 'middle';
               
               data.forEach((value, index) => {
-                const meta = chart.getDatasetMeta(0);
-                const point = meta.data[index];
-                
-                if (point && value !== null && value !== undefined) {
-                  // ポイントの座標を取得
-                  const x = point.x;
-                  const y = point.y;
-                  
-                  // 中心からの角度を計算
-                  const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
-                  const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
-                  
-                  const angle = Math.atan2(y - centerY, x - centerX);
-                  
-                  // 偏差値を表示する位置を調整（ポイントから少し外側）
-                  const offsetDistance = 20;
-                  const textX = x + Math.cos(angle) * offsetDistance;
-                  const textY = y + Math.sin(angle) * offsetDistance;
-                  
-                  // 背景の円を描画
-                  ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                  ctx.beginPath();
-                  ctx.arc(textX, textY, 12, 0, 2 * Math.PI);
-                  ctx.fill();
-                  
-                  // 枠線を描画
-                  ctx.strokeStyle = 'rgba(0,123,255,0.8)';
-                  ctx.lineWidth = 1;
-                  ctx.stroke();
-                  
-                  // 偏差値の数値を描画
-                  ctx.fillStyle = '#333';
-                  ctx.fillText(value.toString(), textX, textY);
-                }
+          const meta = chart.getDatasetMeta(0);
+          const point = meta.data[index];
+          
+          if (point && value !== null && value !== undefined) {
+            // ポイントの座標を取得
+            const x = point.x;
+            const y = point.y;
+            
+            // 中心からの角度を計算
+            const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+            const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+            
+            const angle = Math.atan2(y - centerY, x - centerX);
+            
+            // 偏差値を表示する位置を調整（ポイントから少し外側）
+            const offsetDistance = 20;
+            const textX = x + Math.cos(angle) * offsetDistance;
+            const textY = y + Math.sin(angle) * offsetDistance;
+            
+            // 背景の円を描画
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.arc(textX, textY, 12, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 枠線を描画（科目名の色を使用）
+            const label = labels[index];
+            ctx.strokeStyle = labelColors[label] || 'rgba(0,123,255,0.8)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(textX, textY, 12, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // 偏差値の数値を描画
+            ctx.fillStyle = '#333';
+            ctx.fillText(value.toString(), textX, textY);
+          }
               });
               
               ctx.restore();
