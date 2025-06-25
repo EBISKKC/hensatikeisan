@@ -96,26 +96,62 @@
       .card.kanri {
         background: #fff7e0;
         /* オレンジ寄りの黄色 */
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-right: none;
+        border-image: none;
+        box-shadow: inset 8px 0 0 orange;
       }
       .card.kansa {
         background: #e0f4ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-right: none;
+        border-image: none;
+        box-shadow: inset 8px 0 0 #0288d1;
         /* 水色 */
       }
       .card.hou {
         background: #fffde0;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-right: none;
+        border-image: none;
+        box-shadow: inset 8px 0 0 #bfa800;
         /* 黄色 */
       }
       .card.sozei {
         background: #f3e0ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-right: none;
+        border-image: none;
+        box-shadow: inset 8px 0 0 #8e24aa;
         /* 紫色 */
       }
       .card.sentaku {
         background: #e0ffe0;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-right: none;
+        border-image: none;
+        box-shadow: inset 8px 0 0 #388e3c;
         /* 緑色 */
       }
       .card.zaimu {
-        background: #e3f0ff;
-        /* 青色 */
+        background: #ffe0e0;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-right: none;
+        border-image: none;
+        box-shadow: inset 8px 0 0 #d32f2f;
+        /* 赤色 */
       }
       /* アニメーション関連のスタイル */
       .firework {
@@ -126,27 +162,40 @@
         pointer-events: none;
         z-index: 1000;
       }
-      
+
       .shake {
         animation: shake 0.5s ease-in-out infinite;
       }
-      
+
       @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
       }
-      
+
       .bounce {
         animation: bounce 0.8s ease-out;
       }
-      
+
       @keyframes bounce {
-        0% { transform: scale(1) translateY(0); }
-        50% { transform: scale(1.1) translateY(-10px); }
-        100% { transform: scale(1) translateY(0); }
+        0% {
+          transform: scale(1) translateY(0);
+        }
+        50% {
+          transform: scale(1.1) translateY(-10px);
+        }
+        100% {
+          transform: scale(1) translateY(0);
+        }
       }
-      
+
       .celebration-message {
         position: fixed;
         top: 50%;
@@ -163,7 +212,7 @@
         animation: celebrationPop 1.5s ease-out;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
       }
-      
+
       .donmai-message {
         position: fixed;
         top: 50%;
@@ -180,49 +229,55 @@
         animation: donmaiPop 2s ease-out;
         box-shadow: 0 8px 32px rgba(244, 67, 54, 0.3);
       }
-      
+
       @keyframes celebrationPop {
-        0% { 
+        0% {
           transform: translate(-50%, -50%) scale(0) rotate(0deg);
           opacity: 0;
         }
-        50% { 
+        50% {
           transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
           opacity: 1;
         }
-        100% { 
+        100% {
           transform: translate(-50%, -50%) scale(0) rotate(360deg);
           opacity: 0;
         }
       }
-      
+
       @keyframes donmaiPop {
-        0% { 
+        0% {
           transform: translate(-50%, -50%) scale(0);
           opacity: 0;
         }
-        20% { 
+        20% {
           transform: translate(-50%, -50%) scale(1.1);
           opacity: 1;
         }
-        80% { 
+        80% {
           transform: translate(-50%, -50%) scale(1);
           opacity: 1;
         }
-        100% { 
+        100% {
           transform: translate(-50%, -50%) scale(0);
           opacity: 0;
         }
       }
-      
+
       .pulse {
         animation: pulse 0.6s ease-in-out;
       }
-      
+
       @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       @media (max-width: 600px) {
@@ -420,19 +475,27 @@
     <script type="module">
       // アニメーション関数群
       function createFireworks() {
-        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+        const colors = [
+          '#ff6b6b',
+          '#4ecdc4',
+          '#45b7d1',
+          '#96ceb4',
+          '#feca57',
+          '#ff9ff3',
+        ];
         const fireworksCount = 15;
-        
+
         for (let i = 0; i < fireworksCount; i++) {
           setTimeout(() => {
             const firework = document.createElement('div');
             firework.className = 'firework';
-            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.backgroundColor =
+              colors[Math.floor(Math.random() * colors.length)];
             firework.style.left = Math.random() * window.innerWidth + 'px';
             firework.style.top = Math.random() * window.innerHeight + 'px';
-            
+
             document.body.appendChild(firework);
-            
+
             // 花火の動きとフェードアウト
             let opacity = 1;
             let scale = 1;
@@ -441,7 +504,7 @@
               scale += 0.1;
               firework.style.opacity = opacity;
               firework.style.transform = `scale(${scale})`;
-              
+
               if (opacity <= 0) {
                 clearInterval(fadeInterval);
                 firework.remove();
@@ -450,33 +513,33 @@
           }, i * 100);
         }
       }
-      
+
       function showCelebrationMessage(message) {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'celebration-message';
         messageDiv.textContent = message;
         document.body.appendChild(messageDiv);
-        
+
         setTimeout(() => {
           messageDiv.remove();
         }, 1500);
       }
-      
+
       function showDonmaiMessage() {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'donmai-message';
         messageDiv.textContent = 'ドンマイ！ 💪 次は絶対いける！';
         document.body.appendChild(messageDiv);
-        
+
         // 画面を揺らす
         document.body.classList.add('shake');
-        
+
         setTimeout(() => {
           messageDiv.remove();
           document.body.classList.remove('shake');
         }, 2000);
       }
-      
+
       function addButtonPulse(buttonId) {
         const button = document.getElementById(buttonId);
         button.classList.add('pulse');
@@ -484,7 +547,7 @@
           button.classList.remove('pulse');
         }, 600);
       }
-      
+
       function addResultBounce() {
         const result = document.getElementById('result');
         result.classList.add('bounce');
@@ -509,7 +572,7 @@
       document.getElementById('calcBtn').addEventListener('click', function () {
         // ボタンにパルスエフェクトを追加
         addButtonPulse('calcBtn');
-        
+
         // 入力欄をすべて取得
         const inputIds = ['zaimu', 'kanri', 'kansa', 'hou', 'sozei', 'sentaku'];
         for (const id of inputIds) {
@@ -721,7 +784,7 @@
           }, 300);
         }
         document.getElementById('result').innerHTML = html;
-        
+
         // 結果表示にバウンスエフェクト
         addResultBounce();
 
@@ -820,7 +883,7 @@
         .addEventListener('click', function () {
           // ボタンにパルスエフェクト
           addButtonPulse('tweetBtn');
-          
+
           const resultText = document
             .getElementById('result')
             .textContent.trim();
