@@ -101,6 +101,11 @@
         font-size: 1.2rem;
         font-weight: bold;
         color: #333;
+        display: none; /* 初期状態では非表示 */
+      }
+
+      #radarChart {
+        display: none; /* 初期状態では非表示 */
       }
       .card {
         border-radius: 8px;
@@ -197,6 +202,58 @@
         }
         h1 {
           font-size: 1.1rem;
+        }
+      }
+
+      footer {
+        text-align: center;
+        padding: 1rem;
+        margin-top: 2rem;
+        font-size: 0.85rem;
+        color: #666;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      footer .logo {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 600px) {
+        footer {
+          margin-top: 1rem;
+          padding: 0.8rem;
+          font-size: 0.8rem;
+        }
+        
+        footer .logo {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .screenshot-message {
+        text-align: center;
+        margin-top: 1rem;
+        padding: 0.8rem;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #495057;
+        display: none;
+      }
+
+      @media (max-width: 600px) {
+        .screenshot-message {
+          font-size: 0.85rem;
+          padding: 0.7rem;
         }
       }
     </style>
@@ -364,8 +421,25 @@
       <div class="result" id="result"></div>
       <canvas id="radarChart" style="max-width: 100%"></canvas>
       <button type="button" id="tweetBtn">結果をXをポスト</button>
+      <div class="screenshot-message" id="screenshotMessage">
+        レーダーチャートをスクショして投稿しよう！
+      </div>
 
     </div>
+    
+    <footer>
+      <p>Produced by Redraw</p>
+      <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1e5ba8;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M10 10 L60 10 L50 50 L0 50 Z" fill="url(#blueGradient)" />
+        <path d="M40 50 L90 50 L80 90 L30 90 Z" fill="url(#blueGradient)" />
+      </svg>
+    </footer>
     <script type="module">
       import { calcHensachi } from './hensachi-calc.js';
       let chart = null;
@@ -388,8 +462,11 @@
           if (containsZenkakuNumber(val)) {
             document.getElementById('result').textContent =
               '偏差値は半角数字で入力してください。';
+            document.getElementById('result').style.display = 'block';
             if (chart) chart.destroy();
+            document.getElementById('radarChart').style.display = 'none';
             document.getElementById('tweetBtn').style.display = 'none';
+            document.getElementById('screenshotMessage').style.display = 'none';
             return;
           }
         }
@@ -411,8 +488,11 @@
         if (emptyInput) {
           document.getElementById('result').textContent =
             '偏差値を入力してください。';
+          document.getElementById('result').style.display = 'block';
           if (chart) chart.destroy();
+          document.getElementById('radarChart').style.display = 'none';
           document.getElementById('tweetBtn').style.display = 'none';
+          document.getElementById('screenshotMessage').style.display = 'none';
           return;
         }
         for (const id of inputIds) {
@@ -420,8 +500,11 @@
           if (containsZenkakuNumber(val)) {
             document.getElementById('result').textContent =
               '偏差値は半角数字で入力してください。';
+            document.getElementById('result').style.display = 'block';
             if (chart) chart.destroy();
+            document.getElementById('radarChart').style.display = 'none';
             document.getElementById('tweetBtn').style.display = 'none';
+            document.getElementById('screenshotMessage').style.display = 'none';
             return;
           }
         }
@@ -553,12 +636,12 @@
         }
 
         // 結果表示
-        let html = '';
-        html += `<div class="result">${sogoLabel}</div>`;
-        document.getElementById('result').innerHTML = html;
+        document.getElementById('result').textContent = sogoLabel;
+        document.getElementById('result').style.display = 'block';
 
         // レーダーチャート描画
         const ctx = document.getElementById('radarChart').getContext('2d');
+        document.getElementById('radarChart').style.display = 'block';
         if (chart) chart.destroy();
         // カード色と同じ色をラベルに適用
         const labelColors = {
@@ -681,6 +764,7 @@
         });
         // シェアボタン表示
         document.getElementById('tweetBtn').style.display = 'block';
+        document.getElementById('screenshotMessage').style.display = 'block';
       });
 
       // 免除チェックボックスの制御
