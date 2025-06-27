@@ -363,7 +363,8 @@
       </form>
       <div class="result" id="result"></div>
       <canvas id="radarChart" style="max-width: 100%"></canvas>
-      <button type="button" id="tweetBtn">結果をXでシェア</button>
+      <button type="button" id="tweetBtn">結果をXをポスト</button>
+
     </div>
     <script type="module">
       import { calcHensachi } from './hensachi-calc.js';
@@ -728,26 +729,52 @@
           let totalHensachi = sogoText ? Number(sogoText[1]) : null;
           // 足切り判定
           const resultDiv = document.getElementById('result');
-          if (resultDiv.innerHTML.includes('足切りです')) {
-            tweetText = `総合偏差値：${totalHensachi}、残念ながら、足切りです...☠️ #会計士 #偏差値計算`;
-          } else if (totalHensachi !== null) {
-            if (totalHensachi >= 65) {
-              tweetText = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？🤯 #会計士 #偏差値計算`;
-            } else if (totalHensachi >= 60) {
-              tweetText = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨 #会計士 #偏差値計算`;
-            } else if (totalHensachi >= 55) {
-              tweetText = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥 #会計士 #偏差値計算`;
-            } else if (totalHensachi >= 52) {
-              tweetText = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎 #会計士 #偏差値計算`;
-            } else if (totalHensachi >= 50) {
-              tweetText = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀 #会計士 #偏差値計算`;
+            // 各科目の偏差値を取得してフォーマット
+            const subjects = ['財務', '管理', '監査', '企業', '租税', '経営'];
+            const inputMap = {
+            '財務': 'zaimu',
+            '管理': 'kanri', 
+            '監査': 'kansa',
+            '企業': 'hou',
+            '租税': 'sozei',
+            '経営': 'sentaku'
+            };
+            
+            let subjectLines = '';
+            subjects.forEach(subject => {
+            const inputId = inputMap[subject];
+            const menjoId = `menjo-${inputId}`;
+            const isMenjo = document.getElementById(menjoId).checked;
+            
+            if (isMenjo) {
+              subjectLines += `${subject}：免除\n`;
             } else {
-              tweetText = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥 #会計士 #偏差値計算`;
+              const value = document.getElementById(inputId).value;
+              subjectLines += `${subject}：${value || ''}\n`;
             }
-          } else {
-            tweetText =
-              resultText + '\n' + location.href + '\n#公認会計士 #偏差値計算';
-          }
+            });
+
+            if (resultDiv.innerHTML.includes('足切りです')) {
+            tweetText = `${subjectLines}\n総合偏差値：${totalHensachi}、残念ながら、足切りです...☠️ #会計士 #偏差値計算`;
+            } else if (totalHensachi !== null) {
+            let sogoMessage = '';
+            if (totalHensachi >= 65) {
+              sogoMessage = `総合偏差値${totalHensachi}！？やるやん！天才爆誕！？🤯`;
+            } else if (totalHensachi >= 60) {
+              sogoMessage = `総合偏差値${totalHensachi}！いいね！このまま突っ走れ～💨`;
+            } else if (totalHensachi >= 55) {
+              sogoMessage = `総合偏差値${totalHensachi}、ジワジワきてる、その調子🔥`;
+            } else if (totalHensachi >= 52) {
+              sogoMessage = `総合偏差値${totalHensachi}！もうひと伸び！次の自分に期待😎`;
+            } else if (totalHensachi >= 50) {
+              sogoMessage = `総合偏差値${totalHensachi}、おしい！あとちょっとでゾーン突入🚀`;
+            } else {
+              sogoMessage = `総合偏差値${totalHensachi}。まだまだここから！レベチ目指してリベンジ🔥`;
+            }
+            tweetText = `${subjectLines}\n${sogoMessage}\n#公認会計士 #偏差値計算`;
+            } else {
+            tweetText = `${subjectLines}\n${resultText}\n#公認会計士 #偏差値計算`;
+            }
           // Xアプリ優先で開くintentスキーム
           const tweet = encodeURIComponent(tweetText + '\n' + location.href);
           const xIntentUrl = `twitter://post?message=${tweet}`;
