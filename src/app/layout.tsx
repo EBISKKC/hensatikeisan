@@ -3,6 +3,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './theme'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: '公認会計士試験 偏差値計算アプリ',

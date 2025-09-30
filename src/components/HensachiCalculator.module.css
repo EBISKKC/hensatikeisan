@@ -1,0 +1,233 @@
+.wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e3ecf7 0%, #f7fafd 100%);
+  padding: 2rem 0;
+}
+
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem;
+}
+
+.container h1 {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.card {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.cardTitle {
+  font-weight: 600;
+  font-size: 1.08rem;
+  margin-bottom: 0.7rem;
+  color: #1a237e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.01em;
+}
+
+.menjoLabel {
+  font-weight: normal;
+  font-size: 0.98rem;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.card input[type='number'] {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.card input[type='number']:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.kanri {
+  background: #fff7e0;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid orange;
+  box-shadow: inset 8px 0 0 orange;
+}
+
+.kansa {
+  background: #e0f4ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #0288d1;
+  box-shadow: inset 8px 0 0 #0288d1;
+}
+
+.hou {
+  background: #fffde0;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #bfa800;
+  box-shadow: inset 8px 0 0 #bfa800;
+}
+
+.sozei {
+  background: #f3e0ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #8e24aa;
+  box-shadow: inset 8px 0 0 #8e24aa;
+}
+
+.sentaku {
+  background: #e0ffe0;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #388e3c;
+  box-shadow: inset 8px 0 0 #388e3c;
+}
+
+.zaimu {
+  background: #ffe0e0;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #d32f2f;
+  box-shadow: inset 8px 0 0 #d32f2f;
+}
+
+.container button {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: #2c3e50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  letter-spacing: 0.005em;
+  box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2);
+  transition: all 0.2s ease;
+}
+
+.container button:hover {
+  background: #34495e;
+  box-shadow: 0 3px 8px rgba(44, 62, 80, 0.3);
+}
+
+.container button:active {
+  background: #2c3e50;
+  box-shadow: 0 1px 3px rgba(44, 62, 80, 0.3);
+  transform: translateY(1px);
+}
+
+.container button:focus {
+  outline: none;
+  box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2), 0 0 0 3px rgba(52, 152, 219, 0.3);
+}
+
+.result {
+  text-align: center;
+  margin: 1.2rem 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.tweetBtn {
+  display: block;
+}
+
+.screenshotMessage {
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #666;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.logo {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 0.5rem;
+  }
+
+  .container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .container h1 {
+    font-size: 1.1rem;
+  }
+
+  .footer {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  .screenshotMessage {
+    font-size: 0.85rem;
+    padding: 0.7rem;
+  }
+}
